@@ -1,0 +1,31 @@
+---
+- hosts: servers
+  sudo: true
+
+  vars:
+    etcd_repo: https://github.com/coreos/etcd.git
+    etcd_clone: /srv/etcd-src
+    etcd_version: v0.4.6
+
+  tasks:
+  - name: ensure golang is the latest version
+    apt: pkg={{ item }} state=latest
+    with_items:
+      - git
+      - golang-go
+
+  - name: check if ectd {{ etcd_version }} is already at {{ etcd_clone }}/bin/etcd
+    stat: path={{ etcd_clone }}/bin/etcd
+    register: etcd_result
+
+  - name: clone ectd {{ etcd_version }}
+    git: repo={{ etcd_repo }}
+       dest={{ etcd_clone }}
+       version={{ etcd_version }}
+    register: ectd_cloned_done
+    when: etcd_result.stat.exists == false
+
+  - name: build etcd {{ etcd_version }} from {{  etcd_repo }}
+    command: chdir={{ etcd_clone }} ./build
+    when: etcd_result.stat.exists == false and ectd_cloned_done|success
+

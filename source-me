@@ -1,0 +1,1 @@
+export ANSIBLE_HOSTS=${PWD}/ansible_hosts
