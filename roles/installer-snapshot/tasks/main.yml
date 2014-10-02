@@ -1,0 +1,15 @@
+---
+- name: "checking for {{ install_snapshot.home }}"
+  stat: path={{ install_snapshot.home }}
+  register: install_snapshot_home
+
+- name: "make {{ install_snapshot.home }}"
+  file: path={{ install_snapshot.home }} state=directory owner=root group=root mode=0755
+  when: install_snapshot_home.stat.exists == false
+
+- name: upload snapshot script
+  template: src=snapshot.j2 dest="{{ install_snapshot.home }}/snapshot.sh" mode=0755  
+
+- name: create snaphost history of currently installed packages
+  shell: "{{ install_snapshot.home }}/snapshot.sh"
+ 

@@ -1,0 +1,16 @@
+---
+- name: check if fleet {{ fleet.version }} is already at {{ fleet.clone }}/bin/fleet
+  stat: path={{ fleet.clone }}/bin/fleetd
+  register: fleet_result
+
+- name: clone fleet {{ fleet.version }}
+  git: repo={{ fleet.repo }}
+     dest={{ fleet.clone }}
+     version={{ fleet.version }}
+  register: fleet_cloned_done
+  when: fleet_result.stat.exists == false
+
+- name: build fleet {{ fleet.version }} from {{  fleet.repo }}
+  command: chdir={{ fleet.clone }} ./build
+  when: fleet_result.stat.exists == false and fleet_cloned_done|success
+

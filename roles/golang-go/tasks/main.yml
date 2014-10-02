@@ -1,0 +1,5 @@
+---
+- name: ensure golang-go is the latest version
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - golang-go

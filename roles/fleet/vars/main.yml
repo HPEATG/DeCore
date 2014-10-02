@@ -1,0 +1,5 @@
+---
+fleet:
+  repo: https://github.com/coreos/fleet.git
+  clone: /srv/fleet-src
+  version: v0.8.2

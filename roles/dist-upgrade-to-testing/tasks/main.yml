@@ -1,0 +1,37 @@
+---
+ - name: updates a server
+   apt: update_cache=yes cache_valid_time=3600
+ - name: upgrade a server
+   apt: upgrade=full
+ - name: remove deb wheezy repo
+   apt_repository: repo='deb http://http.debian.net/debian wheezy main' state=absent
+ - name: remove deb-src wheezy repo
+   apt_repository: repo='deb-src http://http.debian.net/debian wheezy main' state=absent
+ - name: remove deb wheezy-updates repo
+   apt_repository: repo='deb http://http.debian.net/debian wheezy-updates main' state=absent
+ - name: remove deb-src wheezy-updates repo
+   apt_repository: repo='deb-src http://http.debian.net/debian wheezy-updates main' state=absent
+ - name: remove deb wheezy-backports repo
+   apt_repository: repo='deb http://http.debian.net/debian wheezy-backports main' state=absent
+ - name: remove deb-src wheezy-backports repo
+   apt_repository: repo='deb-src http://http.debian.net/debian wheezy-backports main' state=absent
+ # Lets add the testing repo now.
+ - name: add deb testing repo
+   apt_repository: repo='deb http://http.debian.net/debian testing main' state=present
+ - name: add deb-src testing repo
+   apt_repository: repo='deb-src http://http.debian.net/debian testing main' state=present
+ - name: add deb testing-updates repo
+   apt_repository: repo='deb http://http.debian.net/debian testing-updates main' state=present
+ - name: add deb-src testing-updates repo
+   apt_repository: repo='deb-src http://http.debian.net/debian testing-updates main' state=present
+ - name: add deb testing-backports repo
+   apt_repository: repo='deb http://http.debian.net/debian testing-backports main' state=absent
+ - name: add deb-src testing-backports repo
+   apt_repository: repo='deb-src http://http.debian.net/debian testing-backports main' state=absent
+ - name: add deb testing-security repo
+   apt_repository: repo='deb http://security.debian.org testing/updates main'  state=present
+ - name: add deb testing-security repo
+   apt_repository: repo='deb-src http://security.debian.org testing/updates main'  state=present
+ # Try to do the upgrade again
+ - name: dist-upgrade a server
+   apt: update_cache=yes upgrade=dist dpkg_options='force-confold,force-confdef'

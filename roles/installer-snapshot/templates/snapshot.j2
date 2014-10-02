@@ -1,0 +1,24 @@
+#!/bin/bash
+# just get the info for the current installed packages
+
+DATE=$(date +%s)
+ARCHIVE="{{ install_snapshot.home }}"
+
+if [ -d ${ARCHIVE} ] ; then
+  cd ${ARCHIVE}
+else
+  echo "No ${ARCIVE} dir"
+  exit 1
+fi
+
+dpkg  --get-selections > dpkg-get-selections.${DATE}.txt
+
+ls -sf dpkg-get-selections.${DATE}.txt dpkg-get-selections.txt
+
+
+dpkg-query -W -f '${status} ${package} ${version}\n' |
+   sed -n 's/^install ok installed //p' > dpkg-query.${DATE}.txt
+
+ln -sf dpkg-query.${DATE}.txt dpkg-query.txt
+
+

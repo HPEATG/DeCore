@@ -1,0 +1,6 @@
+---
+- hosts: all
+  sudo: true
+  roles:
+    - upgrade-server
+    - dist-upgrade-to-testing

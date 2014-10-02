@@ -1,0 +1,10 @@
+---
+etcd:
+  repo: https://github.com/coreos/etcd.git
+  clone: /srv/etcd-src
+  version: v0.4.6
+
+etcdctl:
+  repo: https://github.com/coreos/etcdctl.git
+  clone: /srv/etcdctl-src
+  version: v0.4.5
