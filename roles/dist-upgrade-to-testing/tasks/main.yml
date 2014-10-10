@@ -1,8 +1,8 @@
 ---
  - name: updates a server
-   apt: update_cache=yes cache_valid_time=3600
+   apt: update_cache=yes 
  - name: upgrade a server
-   apt: upgrade=full
+   apt: upgrade=full 
  - name: remove deb wheezy repo
    apt_repository: repo='deb http://http.debian.net/debian wheezy main' state=absent
  - name: remove deb-src wheezy repo

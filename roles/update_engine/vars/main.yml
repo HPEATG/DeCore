@@ -1,0 +1,5 @@
+---
+update_engine:
+  repo: https://github.com/coreos/update_engine
+  clone: /srv/update_engine-src
+  version: master

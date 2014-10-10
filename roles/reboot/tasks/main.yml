@@ -1,0 +1,4 @@
+---
+- name: reboot the server
+  sudo: true
+  shell: reboot

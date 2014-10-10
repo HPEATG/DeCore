@@ -1,0 +1,17 @@
+---
+# update_engine server
+- name: check if update_engine {{ update_engine.version }} is already at {{ update_engine.clone }}/bin/update_engine
+  stat: path={{ update_engine.clone }}/bin/update_engine
+  register: update_engine_result
+
+- name: clone update_engine {{ update_engine.version }}
+  git: repo={{ update_engine.repo }}
+     dest={{ update_engine.clone }}
+     version={{ update_engine.version }}
+  register: update_engine_cloned_done
+  when: update_engine_result.stat.exists == false
+
+- name: build update_engine {{ update_engine.version }} from {{  update_engine.repo }}
+  command: chdir={{ update_engine.clone }} ./build
+  when: update_engine_result.stat.exists == false and update_engine_cloned_done|success
+

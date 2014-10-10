@@ -11,14 +11,29 @@ else
   exit 1
 fi
 
-dpkg  --get-selections > dpkg-get-selections.${DATE}.txt
+dpkg  --get-selections > dpkg-get-selections.txt
 
-ls -sf dpkg-get-selections.${DATE}.txt dpkg-get-selections.txt
+dpkg-query -W -f '${status} ${package} ${version}\n' | \
+  sed -n 's/^install ok installed //p' > dpkg-query.txt
 
 
-dpkg-query -W -f '${status} ${package} ${version}\n' |
-   sed -n 's/^install ok installed //p' > dpkg-query.${DATE}.txt
-
-ln -sf dpkg-query.${DATE}.txt dpkg-query.txt
-
+if [ ! -d .git ] ; then
+  if [ $(which git) ] ; then
+    git init
+    git add -A
+    git commit -a -m "${DATE} Initial Snapshot"
+  else
+    echo "Missing git and you won't beable to check later"
+    cp dpkg-get-selections.txt dpkg-get-selections-${DATE}.txt
+    cp dpkg-query.txt dpkg-query-${DATE}.txt
+    echo "Remember to read epoch is simple" > README
+    echo " "
+    echo "date -d @${DATE}"  >> README
+    echo "$(date -d @${DATE})" >> README
+    exit
+  fi
+else
+  git add -A
+  git commit -a -m "${DATE} changes" || echo "No package changes"
+fi
 

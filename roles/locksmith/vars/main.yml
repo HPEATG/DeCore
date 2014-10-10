@@ -1,0 +1,5 @@
+---
+locksmith:
+  repo: https://github.com/coreos/locksmith.git
+  clone: /srv/localsmith-src
+  version: v0.1.8

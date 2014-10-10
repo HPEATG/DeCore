@@ -1,0 +1,17 @@
+---
+# locksmith server
+- name: check if locksmith {{ locksmith.version }} is already at {{ locksmith.clone }}/bin/locksmith
+  stat: path={{ locksmith.clone }}/bin/locksmith
+  register: locksmith_result
+
+- name: clone locksmith {{ locksmith.version }}
+  git: repo={{ locksmith.repo }}
+     dest={{ locksmith.clone }}
+     version={{ locksmith.version }}
+  register: locksmith_cloned_done
+  when: locksmith_result.stat.exists == false
+
+- name: build locksmith {{ locksmith.version }} from {{  locksmith.repo }}
+  command: chdir={{ locksmith.clone }} ./build
+  when: locksmith_result.stat.exists == false and locksmith_cloned_done|success
+
