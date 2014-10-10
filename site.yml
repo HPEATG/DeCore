@@ -1,9 +1,0 @@
----
-- hosts: all
-  sudo: true
-  roles:
-    - git
-    - golang-go
-    - docker.io
-    - etcd
-    - fleet
