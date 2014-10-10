@@ -1,3 +1,6 @@
+[localhost]
+localhost
+
 [servers]
 az1-atg-dcore-01
 az1-atg-dcore-02
