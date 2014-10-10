@@ -1,6 +1,10 @@
 ---
-- hosts: all
+- hosts: servers
   sudo: true
   roles:
+    - installer-snapshot
     - upgrade-server
+    - installer-snapshot
     - dist-upgrade-to-testing
+    - installer-snapshot
+    - reboot
