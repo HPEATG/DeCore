@@ -1,0 +1,11 @@
+---
+- hosts: servers
+  sudo: true
+  roles:
+    - installer-snapshot
+    - git
+    - golang-go
+    - docker.io
+    - etcd
+    - fleet
+    - installer-snapshot
