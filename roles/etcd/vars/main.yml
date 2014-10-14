@@ -2,6 +2,7 @@
 etcd:
   repo: https://github.com/coreos/etcd.git
   clone: /srv/etcd-src
+  discovery: https://discovery.etcd.io/fc13981a5bdc81d499e5da69e0fab7c1
   version: v0.4.6
 
 etcdctl:
