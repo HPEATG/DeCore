@@ -1,0 +1,14 @@
+[Unit]
+Description=etcd
+
+[Service]
+User=root
+PermissionsStartOnly=true
+Environment=ETCD_DATA_DIR=/var/lib/etcd
+Environment=ETCD_PEER_ADDR="{{ ansible_eth0.ipv4.address }}:7001"
+Environment="ETCD_DISCOVERY="{{ etcd.discovery }}"
+Environment=ETCD_ADDR="{{ ansible_eth0.ipv4.address }}:4001"
+Environment=ETCD_NAME=%m
+ExecStart=/srv/etcd-src/bin/etcd 
+Restart=always
+RestartSec=10s
