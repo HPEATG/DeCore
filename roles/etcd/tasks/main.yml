@@ -32,6 +32,11 @@
   when: etcdctl_result.stat.exists == false and etcdctl_cloned_done|success
 
 # Add some logic to start etcd..
-
 - name: upload ectd test script
   template: src=etcd.j2 dest=/tmp/etcd.sh mode=0755
+
+- name: upload systemd etcd.service
+  template: src=etcd.service.j2 dest=/etc/systemd/system/etcd.service mode=0755
+
+- name: start the etcd.service
+  service: service: name=etcd enabled=yes state=started
