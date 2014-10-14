@@ -39,4 +39,4 @@
   template: src=etcd.service.j2 dest=/etc/systemd/system/etcd.service mode=0755
 
 - name: start the etcd.service
-  service: service: name=etcd enabled=yes state=started
+  service: name=etcd enabled=yes state=started
