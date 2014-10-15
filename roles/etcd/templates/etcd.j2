@@ -6,7 +6,7 @@ cd /srv/etcd-src/bin
     -peer-addr {{ ansible_eth0.ipv4.address }}:7001 \
     -addr {{ ansible_eth0.ipv4.address }}:4001 \
     -bind-addr 0.0.0.0 \
-    -discovery https://discovery.etcd.io/8285aa4e35ab8930b5e5a7cffd319337
+    -discovery {{ etcd.discovery }} \
     -peer-bind-addr 0.0.0.0 \
     -data-dir machines/{{ ansible_hostname }} \
     -name {{ ansible_hostname }}

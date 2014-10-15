@@ -31,6 +31,9 @@
   command: chdir={{ etcdctl.clone }} ./build
   when: etcdctl_result.stat.exists == false and etcdctl_cloned_done|success
 
+- user: name=etcd state=absent
+- user: name=etcd system=yes home=/var/lib/etcd comment="etcd user"
+
 # Add some logic to start etcd..
 - name: upload ectd test script
   template: src=etcd.j2 dest=/tmp/etcd.sh mode=0755
