@@ -5,9 +5,14 @@ Setup etcd, docker, fleet, and others on Debian testing
 
 Steps:
 
-Install Ansible
+Install Ansible 1.8
 
-	pip install ansible
+	 sudo pip uninstall ansible
+	 git clone https://github.com/ansible/ansible.git --recursive ansible-src
+	 cd ansible-src
+	 git pull --rebase
+	 git submodule update --init --recursive
+	 sudo python setup.py install
 
 Source source_me file
 
@@ -22,21 +27,21 @@ Create a minimum of three virtual machines named
 Add the VM hosts ip's to your ~/.ssh/config. Modify this to the IP's you want to connect to.
 
 	Host az1-atg-dcore-01
-	Hostname 15.x.x.x
+	Hostname x.x.x.x
     	User debian
-    	IdentityFile ~/.ssh/id_rsa-hp-20120401
+    	IdentityFile ~/.ssh/id_rsa
     	IdentitiesOnly yes
   
 	Host az1-atg-dcore-02
-	Hostname 15.x.x.x
+	Hostname x.x.x.x
     	User debian
-    	IdentityFile ~/.ssh/id_rsa-hp-20120401
+    	IdentityFile ~/.ssh/id_rsa
     	IdentitiesOnly yes
   
 	Host az1-atg-dcore-03
-	Hostname 15.x.x.x
+	Hostname x.x.x.x
     	User debian
-    	IdentityFile ~/.ssh/id_rsa-hp-20120401
+    	IdentityFile ~/.ssh/id_rsa-hp
     	IdentitiesOnly yes
 
 The run this playbook to upgrade from Debian Stable to Testing. A must for systemd.
