@@ -9,75 +9,33 @@
   apt: upgrade=full cache_valid_time=3600 
   tags:
     - repo
+    - upgrade_full
 
-- name: remove deb wheezy repo
-  apt_repository: repo='deb http://http.debian.net/debian wheezy main' state=absent
-  tags:
-    - repo
-
-- name: remove deb-src wheezy repo
-  apt_repository: repo='deb-src http://http.debian.net/debian wheezy main' state=absent
-  tags:
-    - repo
-
-- name: remove deb wheezy-updates repo
-  apt_repository: repo='deb http://http.debian.net/debian wheezy-updates main' state=absent
-  tags:
-    - repo
-
-- name: remove deb-src wheezy-updates repo
-  apt_repository: repo='deb-src http://http.debian.net/debian wheezy-updates main' state=absent
-  tags:
-    - repo
-
-- name: remove deb wheezy-backports repo
-  apt_repository: repo='deb http://http.debian.net/debian wheezy-backports main' state=absent
-  tags:
-    - repo
-
-- name: remove deb-src wheezy-backports repo
-  apt_repository: repo='deb-src http://http.debian.net/debian wheezy-backports main' state=absent
+- name: remove deb wheezy repos
+  apt_repository: repo={{ item }} state=absent
+  with_items:
+    - 'deb http://http.debian.net/debian wheezy main'
+    - 'deb http://http.debian.net/debian wheezy-updates main'
+    - 'deb http://http.debian.net/debian wheezy-backports main'
+    - 'deb-src http://http.debian.net/debian wheezy main'
+    - 'deb-src http://http.debian.net/debian wheezy-updates main'
+    - 'deb-src http://http.debian.net/debian wheezy-backports main'
   tags:
     - repo
 
 # Lets add the testing repo now.
 - name: add deb testing repo
-  apt_repository: repo='deb http://http.debian.net/debian testing main' state=present
-  tags:
-    - repo
-
-- name: add deb-src testing repo
-  apt_repository: repo='deb-src http://http.debian.net/debian testing main' state=present
-  tags:
-    - repo
-
-- name: add deb testing-updates repo
-  apt_repository: repo='deb http://http.debian.net/debian testing-updates main' state=present
-  tags:
-    - repo
-
-- name: add deb-src testing-updates repo
-  apt_repository: repo='deb-src http://http.debian.net/debian testing-updates main' state=present
-  tags:
-    - repo
-
-- name: add deb testing-backports repo
-  apt_repository: repo='deb http://http.debian.net/debian testing-backports main' state=absent
-  tags:
-    - repo
-
-- name: add deb-src testing-backports repo
-  apt_repository: repo='deb-src http://http.debian.net/debian testing-backports main' state=absent
-  tags:
-    - repo
-
-- name: add deb testing-security repo
-  apt_repository: repo='deb http://security.debian.org testing/updates main'  state=present
-  tags:
-    - repo
-
-- name: add deb testing-security repo
-  apt_repository: repo='deb-src http://security.debian.org testing/updates main'  state=present
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - 'deb http://http.debian.net/debian testing main' 
+    - 'deb-src http://http.debian.net/debian testing main' 
+    - 'deb-src http://http.debian.net/debian testing main' 
+    - 'deb http://http.debian.net/debian testing-updates main' 
+    - 'deb-src http://http.debian.net/debian testing-updates main' 
+    - 'deb http://http.debian.net/debian testing-backports main' 
+    - 'deb-src http://http.debian.net/debian testing-backports main' 
+    - 'deb http://security.debian.org testing/updates main'
+    - 'deb-src http://security.debian.org testing/updates main'
   tags:
     - repo
 
