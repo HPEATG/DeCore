@@ -2,11 +2,10 @@
 - name: apt-get update 
   apt: update_cache=yes cache_valid_time=3600  
   tags:
-    - repo
     - update_cache
 
 - name: apt-get upgrade 
-  apt: upgrade=full cache_valid_time=3600 
+  apt: upgrade=full cache_valid_time=3600 update_cache=yes
   tags:
     - repo
     - upgrade_full
@@ -32,7 +31,6 @@
     - "'deb http://security.debian.org testing/updates main'"
     - "'deb-src http://security.debian.org testing/updates main'"
     - "'deb-src http://http.debian.net/debian testing main'" 
-    - "'deb-src http://http.debian.net/debian testing main'"
     - "'deb-src http://http.debian.net/debian testing-updates main'" 
   tags:
     - repo
