@@ -1,0 +1,20 @@
+# launches a certain number of instances
+- name: launch a nova instance
+  hosts: nova 
+  tasks:
+  - name: launch an instance
+    nova_compute:
+      state: present
+      login_username: "{{ nova_username }}"
+      login_password: "{{ nova_password }}"
+      login_tenant_name: "{{ nova_tenant_name }}"
+      name: az1-atg-dcore-{{ item }}
+      auth_url: https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+      region_name: region-b.geo-1
+      image_id: e2e78258-0ac3-40fc-951b-5cb35f996726
+      key_name: test
+      wait_for: 200
+      flavor_id: 100
+      security_groups: default
+      auto_floating_ip: True
+    with_sequence: count=7
