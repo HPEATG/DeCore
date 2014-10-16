@@ -1,11 +1,11 @@
 ---
-- name: updates a server
+- name: apt-get update 
   apt: update_cache=yes cache_valid_time=3600  
   tags:
     - repo
     - update_cache
 
-- name: upgrade a server
+- name: apt-get upgrade 
   apt: upgrade=full cache_valid_time=3600 
   tags:
     - repo
@@ -14,12 +14,12 @@
 - name: remove deb wheezy repos
   apt_repository: repo={{ item }} state=absent
   with_items:
-    - 'deb http://http.debian.net/debian wheezy main'
-    - 'deb http://http.debian.net/debian wheezy-updates main'
-    - 'deb http://http.debian.net/debian wheezy-backports main'
-    - 'deb-src http://http.debian.net/debian wheezy main'
-    - 'deb-src http://http.debian.net/debian wheezy-updates main'
-    - 'deb-src http://http.debian.net/debian wheezy-backports main'
+    - "'deb http://http.debian.net/debian wheezy main'"
+    - "'deb http://http.debian.net/debian wheezy-updates main'"
+    - "'deb http://http.debian.net/debian wheezy-backports main'"
+    - "'deb-src http://http.debian.net/debian wheezy main'"
+    - "'deb-src http://http.debian.net/debian wheezy-updates main'"
+    - "'deb-src http://http.debian.net/debian wheezy-backports main'"
   tags:
     - repo
 
@@ -27,15 +27,15 @@
 - name: add deb testing repo
   apt_repository: repo={{ item }} state=present
   with_items:
-    - 'deb http://http.debian.net/debian testing main' 
-    - 'deb-src http://http.debian.net/debian testing main' 
-    - 'deb-src http://http.debian.net/debian testing main' 
-    - 'deb http://http.debian.net/debian testing-updates main' 
-    - 'deb-src http://http.debian.net/debian testing-updates main' 
-    - 'deb http://http.debian.net/debian testing-backports main' 
-    - 'deb-src http://http.debian.net/debian testing-backports main' 
-    - 'deb http://security.debian.org testing/updates main'
-    - 'deb-src http://security.debian.org testing/updates main'
+    - "'deb http://http.debian.net/debian testing main'" 
+    - "'deb-src http://http.debian.net/debian testing main'" 
+    - "'deb-src http://http.debian.net/debian testing main'"
+    - "'deb http://http.debian.net/debian testing-updates main'" 
+    - "'deb-src http://http.debian.net/debian testing-updates main'" 
+    - "'deb http://http.debian.net/debian testing-backports main'"
+    - "'deb-src http://http.debian.net/debian testing-backports main'" 
+    - "'deb http://security.debian.org testing/updates main'"
+    - "'deb-src http://security.debian.org testing/updates main'"
   tags:
     - repo
 
