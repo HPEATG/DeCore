@@ -12,7 +12,7 @@
     - upgrade_full
 
 - name: remove deb wheezy repos
-  apt_repository: repo={{ item }} state=absent
+  apt_repository: repo={{ item }} state=absent update_cache=no
   with_items:
     - "'deb http://http.debian.net/debian wheezy main'"
     - "'deb http://http.debian.net/debian wheezy-updates main'"
@@ -25,22 +25,20 @@
 
 # Lets add the testing repo now.
 - name: add deb testing repo
-  apt_repository: repo={{ item }} state=present
+  apt_repository: repo={{ item }} state=present update_cache=no
   with_items:
     - "'deb http://http.debian.net/debian testing main'" 
-    - "'deb-src http://http.debian.net/debian testing main'" 
-    - "'deb-src http://http.debian.net/debian testing main'"
     - "'deb http://http.debian.net/debian testing-updates main'" 
-    - "'deb-src http://http.debian.net/debian testing-updates main'" 
-    - "'deb http://http.debian.net/debian testing-backports main'"
-    - "'deb-src http://http.debian.net/debian testing-backports main'" 
     - "'deb http://security.debian.org testing/updates main'"
     - "'deb-src http://security.debian.org testing/updates main'"
+    - "'deb-src http://http.debian.net/debian testing main'" 
+    - "'deb-src http://http.debian.net/debian testing main'"
+    - "'deb-src http://http.debian.net/debian testing-updates main'" 
   tags:
     - repo
 
 # Try to do the upgrade again
 - name: dist-upgrade a server
-  apt: update_cache=yes cache_valid_time=3600 upgrade=dist dpkg_options='force-confold,force-confdef'
+  apt: update_cache=yes upgrade=dist dpkg_options='force-confold,force-confdef'
   tags:
     - repo
