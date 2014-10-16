@@ -1,4 +1,11 @@
 ---
 - name: reboot the server
-  sudo: true
-  shell: reboot
+  command: shutdown -r now "Ansible updates triggered"
+  async: 0
+  poll: 0
+  ignore_errors: true
+
+- name: waiting for server to come back
+  local_action: wait_for host={{ inventory_hostname }}
+                port={{ ansible_ssh_port | default(22) }} state=started
+  sudo: false
