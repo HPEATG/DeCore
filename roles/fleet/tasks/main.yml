@@ -16,7 +16,7 @@
 
 - name: upload systemd fleetd.*
   copy: src=files/{{ item }} mode=0755 owner=root group=root 
-  with_item:
+  with_items:
     - fleetd.socket
     - fleetd.service
 
