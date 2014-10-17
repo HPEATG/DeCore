@@ -15,7 +15,7 @@
   when: fleet_result.stat.exists == false and fleet_cloned_done|success
 
 - name: upload systemd fleetd.*
-  copy: src=files/{{ item }} mode=0755 owner=root group=root 
+  copy: src=files/{{ item }} dest=/etc/systemd/system/{{ item }} mode=0755 owner=root group=root 
   with_items:
     - fleetd.socket
     - fleetd.service
