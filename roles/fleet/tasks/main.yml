@@ -14,11 +14,11 @@
   command: chdir={{ fleet.clone }} ./build
   when: fleet_result.stat.exists == false and fleet_cloned_done|success
 
-- name: upload systemd fleetd.*
+- name: upload systemd fleet.*
   copy: src={{ item }} dest=/etc/systemd/system/{{ item }} mode=0644 owner=root group=root 
   with_items:
-    - fleetd.socket
-    - fleetd.service
+    - fleet.socket
+    - fleet.service
 
 - name: start the fleetd.service
-  service: name=fleetd enabled=yes state=started
+  service: name=fleet enabled=yes state=started
