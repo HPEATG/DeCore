@@ -14,6 +14,6 @@ PermissionsStartOnly=true
 #Environment=ETCD_NAME=%m
 #ExecStart=/srv/etcd-src/bin/etcd 
 
-ExecStart=/srv/etcd-src/bin/etcd -peer-addr {{ ansible_eth0.ipv4.address }}:7001 -addr 127.0.0.1:4001 -bind-addr 0.0.0.0 -discovery {{ etcd.discovery }} -peer-bind-addr 0.0.0.0 -data-dir machines/%m -name %m
+ExecStart=/srv/etcd-src/bin/etcd -peer-addr {{ ansible_eth0.ipv4.address }}:7001 -addr {{ ansible_eth0.ipv4.address }}:4001 -bind-addr 0.0.0.0 -discovery {{ etcd.discovery }} -peer-bind-addr 0.0.0.0 -data-dir machines/%m -name %m
 Restart=always
 RestartSec=10s
