@@ -1,0 +1,5 @@
+---
+- hosts: nova 
+  sudo: true
+  roles:
+    - instance_launcher
