@@ -1,5 +1,5 @@
 ---
-- hosts: servers
+- hosts: "{{ hosts | default('servers') }}"
   sudo: true
   roles:
     - installer-snapshot

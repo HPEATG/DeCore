@@ -1,0 +1,15 @@
+- name: get nova facts
+  nova_facts:
+    login_username: "{{ nova_username }}"
+    login_password: "{{ nova_password }}"
+    login_tenant_name: "{{ nova_tenant_name }}"
+    auth_url: https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+    region_name: region-b.geo-1
+    key_name: atg 
+    wait_for: 200
+    security_groups: default
+
+- name: nova inventory template
+  local_action: template src=inventory.j2 dest=~ubuntu/inventory_atg
+
+

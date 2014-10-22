@@ -1,14 +1,14 @@
 - name: launch an instance
   nova_compute:
-    state: present
+    state: "{{ nova_state | default('present') }}"
     login_username: "{{ nova_username }}"
     login_password: "{{ nova_password }}"
     login_tenant_name: "{{ nova_tenant_name }}"
-    name: az1-atg-dcore-{{ item }}
+    name: test-dcore-{{ item }}
     auth_url: "{{ nova_auth_url }}"
     region_name: "{{ nova_region_name }}"
-    image_id: e2e78258-0ac3-40fc-951b-5cb35f996726
-    key_name: test
+    image_id: "{{ nova_image_id }}"
+    key_name: "{{ nova_key }}"
     wait_for: 200
     flavor_id: 100
     security_groups: default
