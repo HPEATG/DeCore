@@ -20,5 +20,11 @@
     - fleet.socket
     - fleet.service
 
+- name: link fleetctl to /usr/local/bin/fleetctl
+  file: src=/srv/fleet-src/bin/fleetctl  dest=/usr/local/bin/fleetctl state=link
+
+- name: link fleetd to /usr/local/sbin/fleetd
+  file: src=/srv/fleet-src/bin/fleetd  dest=/usr/local/bin/fleetd state=link
+
 - name: start the fleetd.service
   service: name=fleet enabled=yes state=started

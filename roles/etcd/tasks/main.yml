@@ -31,7 +31,14 @@
   command: chdir={{ etcdctl.clone }} ./build
   when: etcdctl_result.stat.exists == false and etcdctl_cloned_done|success
 
+- name: link etcd to /usr/local/sbin/etcd
+  file: src=/srv/etcd-src/bin/etcd dest=/usr/local/sbin/etcd state=link
+
+- name: link etcdctl to /usr/local/bin/etcdctl
+  file: src=/srv/etcdctl-src/bin/etcdctl  dest=/usr/local/bin/etcdctl state=link
+
 - user: name=etcd state=absent
+
 - user: name=etcd system=yes home=/var/lib/etcd comment="etcd user"
 
 # Add some logic to start etcd..
