@@ -4,5 +4,5 @@ Description=Formats the ephemeral drive
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/sbin/wipefs -f /dev/vdc
-ExecStart=/usr/sbin/mkfs.btrfs -f /dev/vdc
+ExecStart=/sbin/wipefs -f /dev/vdc
+ExecStart=/sbin/mkfs.btrfs -f /dev/vdc
