@@ -5,6 +5,9 @@
     - docker.io
     - btrfs-tools
 
+- name: Add docker user for socket
+  user: name=docker shell=/bin/nologin system=yes
+
 - name: Copy docker required systemd units
   copy: src={{ item }}  dest=/etc/systemd/system/{{ item }}  owner=root group=root mode=0644
   with_items:
