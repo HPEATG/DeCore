@@ -1,5 +1,5 @@
 ---
 - hosts: nova 
-  sudo: true
+  sudo: false
   roles:
     - inventory_maker
