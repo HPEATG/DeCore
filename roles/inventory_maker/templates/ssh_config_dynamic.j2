@@ -1,0 +1,8 @@
+
+{% for instance in nova_instances | sort %}
+Host {{ instance }}
+Hostname {{ nova_instances[instance]['ipv4_public'] }}
+  User {{ nova_vm_username | default(debian) }}
+  IdentityFile ~/.ssh/{{ nova_key_name | default(id_dsa) }}
+  IdentitiesOnly yes
+{% endfor %}
