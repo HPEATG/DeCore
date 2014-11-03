@@ -1,15 +1,19 @@
+- name: create inventory directory
+  file: path=~/inventory mode=0644 state=directory
+
 - name: get nova facts
   nova_facts:
     login_username: "{{ nova_username }}"
     login_password: "{{ nova_password }}"
     login_tenant_name: "{{ nova_tenant_name }}"
-    auth_url: https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/
-    region_name: region-b.geo-1
-    key_name: atg 
+    auth_url: "{{ nova_auth_url | default('https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/') }}"
+    region_name: "{{ nova_region_name | default('region-b.geo-1') }}"
+    key_name: "{{ nova_key_name | default('yourkey') }}"
     wait_for: 200
     security_groups: default
 
 - name: nova inventory template
-  local_action: template src=inventory.j2 dest=~ubuntu/inventory_atg
+  local_action: template src=inventory.j2 dest="~/inventory/inventory_{{ nova_username }}"
 
-
+- name: ssh_config file for dynamic hosts
+  local_action: template src=ssh_config_dynamic.j2 dest="~/ssh_config_dynamic_{{ nova_username }}"
