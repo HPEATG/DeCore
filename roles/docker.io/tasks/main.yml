@@ -18,6 +18,12 @@
     - format-ephemeral.service
     - var-lib-docker.mount
 
+- name: start the format-ephemeral 
+  service: name=format-ephemeral enabled=yes state=started
+
+- name: mount var-lib-docker.mount
+  service: name=var-lib-docker.mount enabled=yes state=started
+
 - name: start the docker.service
   service: name=docker enabled=yes state=started
 
