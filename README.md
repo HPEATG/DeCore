@@ -54,7 +54,7 @@ You man need to re-run the above if there are failures with the dist-upgrade pro
 	ansible-playbook demo-installer.yml
 
 
-.h2 Testing Docker
+## Testing Docker
 
 This section will cover how to test Docker both by hand as well as using Ansible
 
@@ -66,6 +66,7 @@ Ensure docker is running:
     CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 
 Of course, there are no images available. Simply by running a given image, Docker will pull it from the registry:
+
     $ sudo docker run -it ubuntu /bin/bash
     Unable to find image 'ubuntu' locally
     Pulling repository ubuntu
@@ -78,5 +79,3 @@ Of course, there are no images available. Simply by running a given image, Docke
     22093c35d77b: Download complete
     root@c5f2511a4dff:/# ls
     bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-
-
