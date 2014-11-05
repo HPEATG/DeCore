@@ -1,0 +1,5 @@
+---
+- hosts: "{{ hosts | default('servers') }}"
+  sudo: true 
+  roles:
+    - docker-verification 

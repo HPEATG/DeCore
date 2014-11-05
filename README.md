@@ -53,32 +53,140 @@ You man need to re-run the above if there are failures with the dist-upgrade pro
 
 	ansible-playbook demo-installer.yml
 
+## Ansible automation
+
+The previous steps of launching nova instances, upgrading them, and installing the software can be accomplished using Ansible. 
+
+The steps are essentially:
+
+1. Create a nova inventory file
+2. Launch instances
+3. Generate an inventory file for the instances
+4. Run dist-upgrade on the instances
+5. Run demo-install on the instances
+
+### Create a nova inventory file
+
+Create an inventory file with your nova credentials. This file will only need localhost because that is where it will run against to launch the instances
+
+    [nova]
+    localhost
+    
+    [nova:vars]
+    nova_username="username"
+    nova_password='redacted password'
+    nova_tenant_name="username-tenant1"
+    nova_region_name="region-b.geo-1"
+    nova_auth_url="https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/"
+    # Verify the image ID corresponding to "Debian Wheezy 7.6+shellshock 64-bit 20141002 - Partner Image" 
+    #nova_image_id=af3507af-bf70-4706-aec4-23936b8db399
+    nova_image_id=e2e78258-0ac3-40fc-951b-5cb35f996726
+    # you will have to pre-create this
+    nova_key=atg
+
+Once this inventory file is created, it should be placed in ~/inventory/inventory_nova for ease-of-use.
+
+Now the playbook to launch the instances can be run. By default, 7 instances will be launched. A different number can be chosen as well by specifying the variable ```num_hosts```
+
+Enter the DeCore repository.
+ 
+Default:
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -vvvv -e setup-hosts.yml
+
+Only 3 hosts:
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -vvvv -e num_hosts=3 setup-hosts.yml
+
+It is now possible to verify using the nova client that the instances are running:
+
+    you@az1-cpu001:~/DeCore$ nova list
+
+### Generate an inventory file for the nova compute instances
+
+Run the playbook to generate an inventory file named ```inventory_username``` one directory up in ```~/inventory```, "username" being what the nova username is:
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_patg -vvvv inventory.yml
+
+Verify the inventory file is created:
+
+   you@az1-cpu001:~/DeCore$ ls -l ../inventory/inventory_username
+
+### Run the dist-upgrade 
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_username dist-upgrade.yml
+
+### Run demo-installer
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_username demo-installer.yml
+
 
 ## Testing Docker
 
 This section will cover how to test Docker both by hand as well as using Ansible
 
-Simple manual test to see if you can launch a single container running ubuntu
+### By Hand
+
+Simple manual test to see if you can launch a single hello-world container
 
 Ensure docker is running:
 
     $ sudo docker ps
     CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 
-Of course, there are no images available. Simply by running a given image, Docker will pull it from the registry:
+Of course, there are no images available. Simply by running a given image, Docker will pull it from the registry. There is a hello-world image available that allows you to test your docker installation in addition to claiming you have run a container!
 
-    $ sudo docker run -it ubuntu /bin/bash
-    Unable to find image 'ubuntu' locally
-    Pulling repository ubuntu
-    5506de2b643b: Download complete
+Run the container, and the output will be the following:
+
+    $ docker run hello-world
+    Unable to find image 'hello-world' locally
+    Pulling repository hello-world
+    ef872312fe1b: Download complete
     511136ea3c5a: Download complete
-    d497ad3926c8: Download complete
-    ccb62158e970: Download complete
-    e791be0477f2: Download complete
-    3680052c0f5c: Download complete
-    22093c35d77b: Download complete
+    7fa0dcdc88de: Download complete
+    Hello from Docker.
+    This message shows that your installation appears to be working correctly.
+    
+    To generate this message, Docker took the following steps:
+     1. The Docker client contacted the Docker daemon.
+     2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+        (Assuming it was not already locally available.)
+     3. The Docker daemon created a new container from that image which runs the
+        executable that produces the output you are currently reading.
+     4. The Docker daemon streamed that output to the Docker client, which sent it
+        to your terminal.
+    
+    To try something more ambitious, you can run an Ubuntu container with:
 
-Next, you will be in an actual shell within the container:
+     $ docker run -it ubuntu bash
+    
+    For more examples and ideas, visit:
+     http://docs.docker.com/userguide/
 
-    root@c5f2511a4dff:/# ls
-    bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+## Testing Docker with Ansible
+
+There is a role available in the DeCore repository named "docker_verification". It can be run using the docker.yml playbook. This playbook uses the docker_verification role which has the following steps:
+
+1. Install Python easy_install
+2. Install PIP
+3. Upgrade six.py (big headache on Debian, this is the simple solution and has to be done)
+4. Install the Docker python client 
+5. Launch 10 (or N) docker containers
+6. Run through the ansible facts from Docker, looping through each container. A large dictionary of information will be returned
+7. Shuts down the containers
+
+Note: This assumes the previous steps of launching the instances, dist-upgrade, and demo-installer have been run. 
+
+To run it only on one host - this can take a while, run the following, specifying ```host``` on the command line:
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_username -e hosts=test-dcore-6 docker.yml
+
+Or to run 20 containers:
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_username -e hosts=test-dcore-6 docker.yml -e container_count=20 
+
+To run it on all hosts:
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_username
+
+Expect to see output of the package installation, launching of containers, then a huge dictionary for you to verify your setup, then the containers being shut down.

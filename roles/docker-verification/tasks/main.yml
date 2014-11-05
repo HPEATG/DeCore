@@ -1,0 +1,29 @@
+- name: install python-setuptools
+  apt: name=python-setuptools state=present
+
+- name: install pip
+  easy_install: name=pip 
+
+- name: upgrade six.py 
+  #command: pip install --upgrade six 
+  pip: name=six state=latest
+
+- name: ensure docker-py is installed
+  pip: name=docker-py state=present
+
+- name: run apache servers
+  docker: image=capttofu/apache name=apache_test_{{ item }}
+  with_sequence: count={{ container_count | default(10) }}
+
+- name: Verify simple docker containers are running
+  action:
+      module: docker_facts
+
+- name: Print info about each container on each host
+  debug: msg="Host{{':'}} {{ inventory_hostname}} Container Name{{':'}} {{ item.key }} IP Address{{':'}} {{ item.value.docker_networksettings.IPAddress }}"
+  when: item.value.docker_state.Running == True
+  with_dict: docker_containers
+
+- name: Shut down containers 
+  docker: image=capttofu/apache name=apache_test_{{ item }} state=absent
+  with_sequence: count={{ container_count | default(10) }}
