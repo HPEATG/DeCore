@@ -77,5 +77,8 @@ Of course, there are no images available. Simply by running a given image, Docke
     e791be0477f2: Download complete
     3680052c0f5c: Download complete
     22093c35d77b: Download complete
+
+Next, you will be in an actual shell within the container:
+
     root@c5f2511a4dff:/# ls
     bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
