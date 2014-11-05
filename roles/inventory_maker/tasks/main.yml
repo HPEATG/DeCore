@@ -1,6 +1,3 @@
-- name: create inventory directory
-  file: path=~/inventory mode=0644 state=directory
-
 - name: get nova facts
   nova_facts:
     login_username: "{{ nova_username }}"
