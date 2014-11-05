@@ -28,10 +28,8 @@
   with_items:
     - "'deb http://http.debian.net/debian testing main'" 
     - "'deb http://http.debian.net/debian testing-updates main'" 
-    - "'deb http://security.debian.org testing/updates main'"
     - "'deb http://http.debian.net/debian unstable main'" 
-    - "'deb http://http.debian.net/debian unstable-updates main'" 
-    - "'deb http://security.debian.org unstable/updates main'"
+    - "'deb http://security.debian.org testing/updates main'"
     - "'deb-src http://security.debian.org testing/updates main'"
     - "'deb-src http://http.debian.net/debian testing main'" 
     - "'deb-src http://http.debian.net/debian testing-updates main'" 
