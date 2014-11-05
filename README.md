@@ -54,3 +54,29 @@ You man need to re-run the above if there are failures with the dist-upgrade pro
 	ansible-playbook demo-installer.yml
 
 
+Testing Docker
+
+This section will cover how to test Docker both by hand as well as using Ansible
+
+Simple manual test to see if you can launch a single container running ubuntu
+
+Ensure docker is running:
+
+    $ sudo docker ps
+    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+Of course, there are no images available. Simply by running a given image, Docker will pull it from the registry:
+    $ sudo docker run -it ubuntu /bin/bash
+    Unable to find image 'ubuntu' locally
+    Pulling repository ubuntu
+    5506de2b643b: Download complete
+    511136ea3c5a: Download complete
+    d497ad3926c8: Download complete
+    ccb62158e970: Download complete
+    e791be0477f2: Download complete
+    3680052c0f5c: Download complete
+    22093c35d77b: Download complete
+    root@c5f2511a4dff:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+
