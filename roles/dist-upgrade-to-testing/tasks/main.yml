@@ -29,9 +29,17 @@
     - "'deb http://http.debian.net/debian testing main'" 
     - "'deb http://http.debian.net/debian testing-updates main'" 
     - "'deb http://security.debian.org testing/updates main'"
+    - "'deb http://http.debian.net/debian unstable main'" 
+    - "'deb http://http.debian.net/debian unstable-updates main'" 
+    - "'deb http://security.debian.org unstable/updates main'"
     - "'deb-src http://security.debian.org testing/updates main'"
     - "'deb-src http://http.debian.net/debian testing main'" 
     - "'deb-src http://http.debian.net/debian testing-updates main'" 
+  tags:
+    - repo
+
+- name: setting up dpkg priority /etc/apt/preferences.d/testing
+  template: src=testing.j2 dest=/etc/apt/preferences.d/testing mode=0644
   tags:
     - repo
 
