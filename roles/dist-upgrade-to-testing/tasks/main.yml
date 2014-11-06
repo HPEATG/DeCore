@@ -10,22 +10,20 @@
     - repo
     - upgrade_full
 
+# So during all this trial and error testing I want to make sure
+# not to leave around a repo by mistake...
 - name: remove deb wheezy repos
   apt_repository: repo={{ item }} state=absent update_cache=no
   with_items:
+    - "'deb http://http.debian.net/debian jessie main'" 
+    - "'deb http://http.debian.net/debian jessie-updates main'" 
+    - "'deb http://security.debian.org jessie/updates main'"
     - "'deb http://http.debian.net/debian wheezy main'"
     - "'deb http://http.debian.net/debian wheezy-updates main'"
     - "'deb http://http.debian.net/debian wheezy-backports main'"
     - "'deb-src http://http.debian.net/debian wheezy main'"
     - "'deb-src http://http.debian.net/debian wheezy-updates main'"
     - "'deb-src http://http.debian.net/debian wheezy-backports main'"
-  tags:
-    - repo
-
-# Lets add the testing repo now.
-- name: add deb testing repo
-  apt_repository: repo={{ item }} state=present update_cache=no
-  with_items:
     - "'deb http://http.debian.net/debian testing main'" 
     - "'deb http://http.debian.net/debian testing-updates main'" 
     - "'deb http://http.debian.net/debian unstable main'" 
@@ -33,6 +31,28 @@
     - "'deb-src http://security.debian.org testing/updates main'"
     - "'deb-src http://http.debian.net/debian testing main'" 
     - "'deb-src http://http.debian.net/debian testing-updates main'" 
+    - "'deb-src http://http.debian.net/debian jessie main'" 
+    - "'deb-src http://http.debian.net/debian jessie-updates main'" 
+    - "'deb-src http://security.debian.org jessie/updates main'"
+  tags:
+    - repo
+
+# Lets add the testing repo now.
+- name: add deb jessie repo
+  apt_repository: repo={{ item }} state=present update_cache=no
+  with_items:
+    - "'deb http://http.debian.net/debian jessie main'" 
+    - "'deb http://http.debian.net/debian jessie-updates main'" 
+    - "'deb http://security.debian.org jessie/updates main'"
+  tags:
+    - repo
+
+- name: add src deb jessie repo
+  apt_repository: repo={{ item }} state=present update_cache=no
+  with_items:
+    - "'deb-src http://http.debian.net/debian jessie main'" 
+    - "'deb-src http://http.debian.net/debian jessie-updates main'" 
+    - "'deb-src http://security.debian.org jessie/updates main'"
   tags:
     - repo
 
