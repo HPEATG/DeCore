@@ -20,8 +20,8 @@
 - name: unmount /mnt
   mount: name=/mnt src=/dev/vdb state=absent
 
-- name: unmount /mnt
-  mount: name=/var/lib/docker src=/dev/vdb opts=noatime fstype=auto state=unmounted
+- name: mount /dev/vdb /var/lib/docker
+  mount: name=/var/lib/docker src=/dev/vdb fstype=auto state=mounted
 
 - name: start the docker.service
   service: name=docker enabled=yes state=started
