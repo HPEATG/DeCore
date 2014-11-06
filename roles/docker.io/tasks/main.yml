@@ -4,6 +4,7 @@
   with_items:
     - docker.io
     - btrfs-tools
+    - aufs-tools
 
 - name: Add docker user for socket
   user: name=docker shell=/bin/nologin system=yes
@@ -15,14 +16,12 @@
     - 50-docker.network
     - docker.service
     - docker.socket
-    - format-ephemeral.service
-    - var-lib-docker.mount
 
-- name: start the format-ephemeral 
-  service: name=format-ephemeral enabled=yes state=started
+- name: unmount /mnt
+  mount: name=/mnt src=/dev/vdb state=absent
 
-- name: mount var-lib-docker.mount
-  service: name=var-lib-docker.mount enabled=yes state=started
+- name: unmount /mnt
+  mount: name=/var/lib/docker src=/dev/vdb opts=noatime fstype=auto state=unmounted
 
 - name: start the docker.service
   service: name=docker enabled=yes state=started
