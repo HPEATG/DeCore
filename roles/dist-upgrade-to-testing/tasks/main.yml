@@ -21,6 +21,8 @@
     - "'deb http://http.debian.net/debian wheezy main'"
     - "'deb http://http.debian.net/debian wheezy-updates main'"
     - "'deb http://http.debian.net/debian wheezy-backports main'"
+    - "'deb http://security.debian.org/ wheezy/updates'"
+    - "'deb-src http://security.debian.org/ wheezy/updates'"
     - "'deb-src http://http.debian.net/debian wheezy main'"
     - "'deb-src http://http.debian.net/debian wheezy-updates main'"
     - "'deb-src http://http.debian.net/debian wheezy-backports main'"
@@ -38,21 +40,21 @@
     - repo
 
 # Lets add the testing repo now.
-- name: add deb jessie repo
+- name: add deb testing repo
   apt_repository: repo={{ item }} state=present update_cache=no
   with_items:
-    - "'deb http://http.debian.net/debian jessie main'" 
-    - "'deb http://http.debian.net/debian jessie-updates main'" 
-    - "'deb http://security.debian.org jessie/updates main'"
+    - "'deb http://http.debian.net/debian testing main'" 
+    - "'deb http://http.debian.net/debian testing-updates main'" 
+    - "'deb http://security.debian.org testing/updates main'"
   tags:
     - repo
 
-- name: add src deb jessie repo
+- name: add src deb testing repo
   apt_repository: repo={{ item }} state=present update_cache=no
   with_items:
-    - "'deb-src http://http.debian.net/debian jessie main'" 
-    - "'deb-src http://http.debian.net/debian jessie-updates main'" 
-    - "'deb-src http://security.debian.org jessie/updates main'"
+    - "'deb-src http://http.debian.net/debian testing main'" 
+    - "'deb-src http://http.debian.net/debian testing-updates main'" 
+    - "'deb-src http://security.debian.org testing/updates main'"
   tags:
     - repo
 
@@ -61,8 +63,15 @@
   tags:
     - repo
 
-# Try to do the upgrade again
-- name: dist-upgrade a server
+# Now that the apt sources have been modifed try a dist-upgrade
+- name: dist-upgrade a server (may fail)
   apt: update_cache=yes upgrade=dist dpkg_options='force-confold,force-confdef'
+  register: apt_result 
+  ignore_errors: True
   tags:
     - repo
+
+# Try to do the dist-upgrade again
+- name: dist-upgrade a server one more time
+  apt: update_cache=no upgrade=dist dpkg_options='force-confold,force-confdef'
+  when: "'FAILED' in apt_result.stderr"

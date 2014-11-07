@@ -7,14 +7,20 @@
   tags:
     - reboot
 
+- name: Add a little delay
+  pause: seconds=30
+
 - name: waiting for server to come back
   sudo: false
-  local_action: >
-    wait_for:
+  local_action:
+    module: wait_for
       host: {{ inventory_hostname }}
       timeout: 300
-      delay: 0
+      delay: 1
       port: 22
       state: started
   tags:
     - reboot
+
+- name: Add a little delay
+  pause: seconds=30
