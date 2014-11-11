@@ -1,0 +1,41 @@
+HOW-TO Build a Debian Testing (Jessie) Image
+============================================
+
+1. Boot from a Debian Wheezy Image.
+
+2. Login to the host.
+
+   a. Edit /etc/apt/sources.list replacing it with:
+
+   | deb http://http.debian.net/debian testing main
+   | deb http://http.debian.net/debian testing-updates main
+   | deb http://security.debian.org testing/updates main
+   |
+   | deb-src http://http.debian.net/debian testing main
+   | deb-src http://http.debian.net/debian testing-updates main
+   | deb-src http://security.debian.org testing/updates main
+
+   b. Upgrade to Testing (Jessie) with the following sequence of
+      commands run as root:
+
+   # apt-get update                           ## Update cache
+   # apt-get -y --download-only dist-upgrade  ## pre-download
+   # apt-get -y -f dist-upgrade               ## Force Upgrade
+   #
+   # ## The dist-upgrade may fail, repeat as needed
+   #
+   # apt-get -y -f dist-upgrade               ## repeat until
+   #                                          ## successful 
+   # apt-get -y autoremove                    ## clean-up
+
+   c. Upgrade complete.  Shutdown the host for imaging
+   
+   # shutdown -h now
+
+3. "Create Snapshot" of the insance from the Horizon console.
+   - alternate:  'nova image-create'  -- see nova command help.
+
+Done.
+
+Author: Eric Gustafson <gustafson@hp.com> 2014-11-11
+
