@@ -14,7 +14,7 @@
   sudo: false
   local_action:
     module: wait_for
-      host="{{ inventory_hostname }}"
+      host={{ inventory_hostname }}
       timeout="300"
       delay="1"
       port="22"
