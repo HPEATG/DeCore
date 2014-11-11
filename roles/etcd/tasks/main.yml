@@ -1,5 +1,39 @@
 ---
 # etcd server
+#  Taken from https://github.com/BrianAker/store_diff_url
+- name: url diff
+  stat: path=files/discovery
+  register: discovery_stat
+  connection: local
+
+- name: grab url 
+  get_url:
+    url: "{{ etcd.discovery }}"
+    dest: files/discovery
+    mode: 0440
+  connection: local
+  register: result
+  when: discovery_stat.stat.exists == False
+
+- name: Test for change
+  debug:
+    msg: "Change occured"
+  when: result.changed
+
+- name: Read into variable
+  command: cat files/discovery
+  connection: local
+  register: file_echo_contents
+
+- name: set fact
+  set_fact:
+    etcd_discovery_contents: "{{ file_echo_contents.stdout }}"
+
+- name: Test for change
+  debug:
+    msg: "{{ etcd_discovery_contents }}"
+
+####
 - name: check if etcd {{ etcd.version }} is already at {{ etcd.clone }}/bin/etcd
   stat: path={{ etcd.clone }}/bin/etcd
   register: etcd_result

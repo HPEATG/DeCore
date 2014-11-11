@@ -14,6 +14,12 @@ Install Ansible 1.8
 	 git submodule update --init --recursive
 	 sudo python setup.py install
 
+Some local variable in the .ansible.cfg
+
+	hostfile       = $HOME/.inventory/
+	library_path   = /usr/share/ansible/atg_modules
+	remote_tmp     = $HOME/.ansible/tmp
+
 Source source_me file
 
 	source source_me

@@ -1,4 +1,10 @@
 ---
+- name: unmount /mnt
+  mount: name=/mnt src=/dev/vdb fstype=ext3 state=absent
+
+- name: mount /dev/vdb /var/lib/docker
+  mount: name=/var/lib/docker src=/dev/vdb fstype=ext3 state=mounted
+
 - name: ensure docker.io is the latest version
   apt: pkg={{ item }} state=latest
   with_items:
@@ -17,12 +23,6 @@
     - docker.service
     - docker.socket
 
-- name: unmount /mnt
-  mount: name=/mnt src=/dev/vdb fstype=ext3 state=absent
-
-- name: mount /dev/vdb /var/lib/docker
-  mount: name=/var/lib/docker src=/dev/vdb fstype=ext3 state=mounted
-
 - name: start the docker.service
-  service: name=docker enabled=yes state=started
+  service: name=docker.service enabled=yes state=started
 
