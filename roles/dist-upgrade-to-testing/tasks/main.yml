@@ -75,3 +75,14 @@
 - name: dist-upgrade a server one more time
   apt: update_cache=no upgrade=dist dpkg_options='force-confold,force-confdef'
   when: "'FAILED' in apt_result.stderr"
+  tags:
+    - repo
+
+- name: Fix the kernel to boot to the right one
+  replace: dest=/boot/extlinux/linux.cfg regexp='3\.2\.0\-4' replace='3.16-3' owner=root group=root mode=644
+  tags:
+    - repo
+
+- name:  Re-run extlinux --update /boot/extlinux
+  command: /usr/bin/extlinux --update /boot/extlinux
+
