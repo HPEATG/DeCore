@@ -1,7 +1,7 @@
 HOW-TO Build a Debian Testing (Jessie) Image
 ============================================
 
-1. Boot from a Debian Wheezy Image.
+1. Boot from a Debian Wheezy Image ((Debian Wheezy 7.7 64-bits 20141022 - Partner Image)
 
 2. Login to the host.
 
