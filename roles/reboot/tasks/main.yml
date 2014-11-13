@@ -16,7 +16,7 @@
     module: wait_for
       host="{{ inventory_hostname }}"
       timeout="300"
-      delay="1"
+      delay="5"
       port="22"
       state="started"
   tags:
