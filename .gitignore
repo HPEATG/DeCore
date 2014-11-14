@@ -1,3 +1,4 @@
 nova.ini
+files/discovery
 inventory
 inventory_nova

@@ -2,10 +2,10 @@
 localhost
 
 [servers]
-az1-atg-dcore-01
-az1-atg-dcore-02
-az1-atg-dcore-03
-az1-atg-dcore-04
-az1-atg-dcore-05
-az1-atg-dcore-06
-az1-atg-dcore-07
+az1-atg-dcore-01 ansible_ssh_host=192.168.25.14 ansible_ssh_user=debian
+az1-atg-dcore-02 ansible_ssh_host=192.168.25.15 ansible_ssh_user=debian
+az1-atg-dcore-03 ansible_ssh_host=192.168.25.16 ansible_ssh_user=debian
+az1-atg-dcore-04 ansible_ssh_host=192.168.25.17 ansible_ssh_user=debian
+az1-atg-dcore-05 ansible_ssh_host=192.168.25.18 ansible_ssh_user=debian
+az1-atg-dcore-06 ansible_ssh_host=192.168.25.19 ansible_ssh_user=debian
+az1-atg-dcore-07 ansible_ssh_host=192.168.25.20 ansible_ssh_user=debian
