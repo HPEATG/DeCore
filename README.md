@@ -14,6 +14,12 @@ Install Ansible 1.8
 	 git submodule update --init --recursive
 	 sudo python setup.py install
 
+Some local variable in the .ansible.cfg
+
+	hostfile       = $HOME/.inventory/
+	library_path   = /usr/share/ansible/atg_modules
+	remote_tmp     = $HOME/.ansible/tmp
+
 Source source_me file
 
 	source source_me
@@ -69,6 +75,8 @@ The steps are essentially:
 
 Create an inventory file with your nova credentials. This file will only need localhost because that is where it will run against to launch the instances
 
+Note: the text ```$inventory_dir``` is used in these steps. This is where you chose to keep your inventory files.
+
     [nova]
     localhost
     
@@ -83,8 +91,15 @@ Create an inventory file with your nova credentials. This file will only need lo
     nova_image_id=e2e78258-0ac3-40fc-951b-5cb35f996726
     # you will have to pre-create this
     nova_key=atg
+    # this is the private key file on the host you are running ansible from
+    nova_key_file=~/.ssh/id_dsa
+    # where you want inventory to be
+    nova_inventory_dir=~/inventory
+    # the ssh_user to use on the host- written to your inventory file 
+    # as ansible_ssh_user as well as your ssh config file
+    ssh_user=debian
 
-Once this inventory file is created, it should be placed in ~/inventory/inventory_nova for ease-of-use.
+Once this inventory file is created, it should be placed in $inventory_dir/inventory_nova for ease-of-use.
 
 Now the playbook to launch the instances can be run. By default, 7 instances will be launched. A different number can be chosen as well by specifying the variable ```num_hosts```
 
@@ -92,11 +107,11 @@ Enter the DeCore repository.
  
 Default:
 
-    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -vvvv -e setup-hosts.yml
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -vvvv -e setup-hosts.yml
 
 Only 3 hosts:
 
-    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -vvvv -e num_hosts=3 setup-hosts.yml
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -vvvv -e num_hosts=3 setup-hosts.yml
 
 It is now possible to verify using the nova client that the instances are running:
 
@@ -104,13 +119,28 @@ It is now possible to verify using the nova client that the instances are runnin
 
 ### Generate an inventory file for the nova compute instances
 
-Run the playbook to generate an inventory file named ```inventory_username``` one directory up in ```~/inventory```, "username" being what the nova username is:
+Run the playbook to generate an inventory file named ```inventory_username``` one directory up in your ```$inventory_dir```, "username" being what the nova username is:
 
-    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_patg -vvvv inventory.yml
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -vvvv inventory.yml
 
 Verify the inventory file is created:
 
-   you@az1-cpu001:~/DeCore$ ls -l ../inventory/inventory_username
+   you@az1-cpu001:~/DeCore$ ls -l $nova_inventory_dir/inventory_username
+
+Note: this will also create an ssh config snippet for these hosts to manually
+add to your .ssh/config file. It is placed in your home directory as 
+```ssh_config_dynamic_username```
+
+### OPTIONAL (!) generate ssh config file for convenience 
+
+This will create an ssh config file based off of the credentials above reading
+what nova compute instances are running. 
+
+IMPORTANT: this will overwrite your existing ssh config which is why it is optional. 
+The previously-mentioned inventory role creates the same file but places it in your
+home directory for you to manually add it. This is a convenience role.
+
+    you@az1-cpu001:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -vvvv ssh_config.yml
 
 ### Run the dist-upgrade 
 

@@ -1,7 +1,17 @@
 [localhost]
 localhost
 
+{% if nova_key_file is defined %}
+{% set ssh_key='ansible_ssh_key=' + nova_key_file %}
+{% else %}
+{% set ssh_key ='' %}
+{% endif %}
+{% if ssh_user is defined %}
+{% set ans_ssh_user='ansible_ssh_user=' + ssh_user %}
+{% else %}
+{% set ans_ssh_user='' %}
+{% endif %}
 [servers]
 {% for instance in nova_instances | sort %}
-{{ instance }} ansible_ssh_host={{ nova_instances[instance]['ipv4_public'] }} ansible_ssh_user=debian
+{{ instance }} {{ ssh_key }} ansible_ssh_host={{ nova_instances[instance]['ipv4_public'] }} {{ ans_ssh_user }} 
 {% endfor %}

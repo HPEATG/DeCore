@@ -1,0 +1,5 @@
+---
+- hosts: nova 
+  sudo: false
+  roles:
+    - ssh_config 

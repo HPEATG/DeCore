@@ -1,12 +1,12 @@
 #!/bin/bash
+# This file is created via ansible
+#cd /srv/etcd-src/bin
 
-cd /srv/etcd-src/bin
-
-./etcd \
+/usr/local/sbin/etcd \
     -peer-addr {{ ansible_eth0.ipv4.address }}:7001 \
     -addr {{ ansible_eth0.ipv4.address }}:4001 \
     -bind-addr 0.0.0.0 \
-    -discovery {{ etcd.discovery }} \
+    -discovery {{ etcd_discovery_contents }} \
     -peer-bind-addr 0.0.0.0 \
     -data-dir machines/{{ ansible_hostname }} \
     -name {{ ansible_hostname }}
