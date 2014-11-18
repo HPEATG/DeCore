@@ -1,3 +1,6 @@
+UserKnownHostsFile=/dev/null
+StrictHostKeyChecking=no
+
 {% for instance in nova_instances | sort %}
 Host {{ instance }}
 Hostname {{ nova_instances[instance]['ipv4_public'] }}
