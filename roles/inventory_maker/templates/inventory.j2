@@ -2,7 +2,7 @@
 localhost
 
 {% if nova_key_file is defined %}
-{% set ssh_key='ansible_ssh_key=' + nova_key_file %}
+{% set ssh_key='ansible_ssh_private_key_file=' + nova_key_file %}
 {% else %}
 {% set ssh_key ='' %}
 {% endif %}
