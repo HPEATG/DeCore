@@ -4,6 +4,11 @@
   tags:
     - update_cache
 
+- name: Install GRUB since extlinux is nolonger used in testing
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - grub2
+
 - name: apt-get upgrade 
   apt: upgrade=full cache_valid_time=3600 update_cache=yes
   tags:
@@ -43,8 +48,8 @@
 - name: add deb testing repo
   apt_repository: repo={{ item }} state=present update_cache=no
   with_items:
-    - "'deb http://http.debian.net/debian testing main'" 
-    - "'deb http://http.debian.net/debian testing-updates main'" 
+    - "'deb http://ftp.us.debian.net/debian testing main'" 
+    - "'deb http://ftp.us.debian.net/debian testing-updates main'" 
     - "'deb http://security.debian.org testing/updates main'"
   tags:
     - repo
@@ -52,8 +57,8 @@
 - name: add src deb testing repo
   apt_repository: repo={{ item }} state=present update_cache=no
   with_items:
-    - "'deb-src http://http.debian.net/debian testing main'" 
-    - "'deb-src http://http.debian.net/debian testing-updates main'" 
+    - "'deb-src http://ftp.us.debian.net/debian testing main'" 
+    - "'deb-src http://ftp.us.debian.net/debian testing-updates main'" 
     - "'deb-src http://security.debian.org testing/updates main'"
   tags:
     - repo
@@ -67,22 +72,17 @@
 - name: dist-upgrade a server (may fail)
   apt: update_cache=yes upgrade=dist dpkg_options='force-confold,force-confdef'
   register: apt_result 
-  ignore_errors: True
+  tags:
+    - repo
+
+- debug: var=apt_result
   tags:
     - repo
 
 # Try to do the dist-upgrade again
-- name: dist-upgrade a server one more time
-  apt: update_cache=no upgrade=dist dpkg_options='force-confold,force-confdef'
-  when: "'FAILED' in apt_result.stderr"
-  tags:
-    - repo
-
-- name: Fix the kernel to boot to the right one
-  replace: dest=/boot/extlinux/linux.cfg regexp='3\.2\.0\-4' replace='3.16-3' owner=root group=root mode=644
-  tags:
-    - repo
-
-- name:  Re-run extlinux --update /boot/extlinux
-  command: /usr/bin/extlinux --update /boot/extlinux
+#- name: dist-upgrade a server one more time
+#  apt: update_cache=no upgrade=dist dpkg_options='force-confold,force-confdef'
+#  when: "'FAILED' in apt_result.stderr"
+#  tags:
+#    - repo
 
