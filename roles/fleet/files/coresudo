@@ -1,0 +1,2 @@
+## the core user has no password by default
+core ALL=(ALL) NOPASSWD: ALL

@@ -1,4 +1,9 @@
 ---
+- user: name=core system=yes home=/home/core comment="CoreOS Admin"
+
+- name: enable sudo for core user
+  copy: src=coresudo dest=/etc/sudoers.d/coresudo mode=0440 owner=root group=root 
+
 - name: check if fleet {{ fleet.version }} is already at {{ fleet.clone }}/bin/fleet
   stat: path={{ fleet.clone }}/bin/fleetd
   register: fleet_result
@@ -19,6 +24,9 @@
   with_items:
     - fleet.socket
     - fleet.service
+
+- name: upload /etc/environment
+  template: src=environment.j2 dest=/etc/environment mode=0644
 
 - name: link fleetctl to /usr/local/bin/fleetctl
   file: src=/srv/fleet-src/bin/fleetctl  dest=/usr/local/bin/fleetctl state=link
