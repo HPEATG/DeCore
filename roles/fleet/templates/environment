@@ -1,0 +1,3 @@
+# This file was added by ansible for fleet
+COREOS_PUBLIC_IPV4="{{ nova_instances[instance]['ipv4_public'] }}"
+COREOS_PRIVATE_IPV4="{{ nova_instances[instance]['ipv4_private'] }}"

@@ -1,4 +1,9 @@
 ---
+- user: name=core system=yes home=/home/core comment="CoreOS Admin"
+
+- name: enable sudo for core user
+  copy: src=coresudo dest=/etc/sudoers.d/coresudo mode=0440 owner=root group=root 
+
 - name: check if fleet {{ fleet.version }} is already at {{ fleet.clone }}/bin/fleet
   stat: path={{ fleet.clone }}/bin/fleetd
   register: fleet_result
