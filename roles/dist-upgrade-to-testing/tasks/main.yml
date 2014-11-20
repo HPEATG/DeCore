@@ -48,20 +48,20 @@
 - name: add deb testing repo
   apt_repository: repo={{ item }} state=present update_cache=no
   with_items:
-    - "'deb http://ftp.us.debian.net/debian testing main'" 
-    - "'deb http://ftp.us.debian.net/debian testing-updates main'" 
+    - "'deb http://ftp.us.debian.org/debian testing main'" 
+    - "'deb http://ftp.us.debian.org/debian testing-updates main'" 
     - "'deb http://security.debian.org testing/updates main'"
   tags:
     - repo
 
-- name: add src deb testing repo
-  apt_repository: repo={{ item }} state=present update_cache=no
-  with_items:
-    - "'deb-src http://ftp.us.debian.net/debian testing main'" 
-    - "'deb-src http://ftp.us.debian.net/debian testing-updates main'" 
-    - "'deb-src http://security.debian.org testing/updates main'"
-  tags:
-    - repo
+#- name: add src deb testing repo
+#  apt_repository: repo={{ item }} state=present update_cache=no
+#  with_items:
+#    - "'deb-src http://ftp.us.debian.org/debian testing main'" 
+#    - "'deb-src http://ftp.us.debian.org/debian testing-updates main'" 
+#    - "'deb-src http://security.debian.org testing/updates main'"
+#  tags:
+#    - repo
 
 - name: setting up dpkg priority /etc/apt/preferences.d/testing
   template: src=testing.j2 dest=/etc/apt/preferences.d/testing mode=0644
@@ -75,10 +75,10 @@
   tags:
     - repo
 
-- debug: var=apt_result
-  tags:
-    - repo
-
+#- debug: var=apt_result
+#  tags:
+#    - repo
+#
 # Try to do the dist-upgrade again
 #- name: dist-upgrade a server one more time
 #  apt: update_cache=no upgrade=dist dpkg_options='force-confold,force-confdef'
