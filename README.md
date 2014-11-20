@@ -30,6 +30,11 @@ Create a minimum of three virtual machines named
 	az1-atg-dcore-02
 	az1-atg-dcore-03
 
+The virtual machines *must* be running the latest Debian "jessie"
+release (aka "testing").  For instructions on how to upgrade HP Cloud
+"wheezy" images to "jessie", see
+[HOWTO-build-testing-image](blob/devel/HOWTO-build-testing-image.md). 
+
 Add the VM hosts ip's to your ~/.ssh/config. Modify this to the IP's you want to connect to.
 
 	Host az1-atg-dcore-01
@@ -50,14 +55,14 @@ Add the VM hosts ip's to your ~/.ssh/config. Modify this to the IP's you want to
     	IdentityFile ~/.ssh/id_rsa-hp
     	IdentitiesOnly yes
 
-The run this playbook to upgrade from Debian Stable to Testing. A must for systemd.
+Next use the `dockerdna-install.yml` playbook to install the Docker
+DNA components onto the running, bare cluster of Debian hosts:
 
-	ansible-playbook dist-upgrade.yml
-
-You man need to re-run the above if there are failures with the dist-upgrade process. Sometimes packages are missing on the mirror you randomly hit. 
-
-
-	ansible-playbook demo-installer.yml
+    ansible-playbook dockerdna-install.yml
+    
+_Note_:  The `dockerdna-install.yml` playbook was formerly named
+`demo-installer.yml` and may not have migrated in the GitHub
+repository yet.  
 
 ## Ansible automation
 
