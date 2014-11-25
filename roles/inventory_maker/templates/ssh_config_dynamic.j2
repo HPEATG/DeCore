@@ -1,5 +1,7 @@
-
+### ssh config for demo start
 {% for instance in nova_instances | sort %}
+{% if not instance.find(nova_name) %}
+# {{ instance }} {{ nova_name }} {{ nova_instances[instance]['ipv4_public'] }}
 Host {{ instance }}
 Hostname {{ nova_instances[instance]['ipv4_public'] }}
 {% if ssh_user is defined %}
@@ -9,4 +11,9 @@ Hostname {{ nova_instances[instance]['ipv4_public'] }}
   IdentityFile {{ nova_key_file }}
 {% endif %}
   IdentitiesOnly yes
+  UserKnownHostsFile=/dev/null
+  StrictHostKeyChecking=no
+
+{% endif %}
 {% endfor %}
+### ssh config for demo end
