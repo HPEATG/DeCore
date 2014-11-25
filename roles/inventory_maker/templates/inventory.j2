@@ -13,5 +13,7 @@ localhost
 {% endif %}
 [servers]
 {% for instance in nova_instances | sort %}
+{% if not instance.find(nova_name) %}
 {{ instance }} {{ ssh_key }} ansible_ssh_host={{ nova_instances[instance]['ipv4_public'] }} ipv4_public={{ nova_instances[instance]['ipv4_public'] }} ipv4_private={{ nova_instances[instance]['ipv4_private'] }} {{ ans_ssh_user }}
+{% endif %}
 {% endfor %}
