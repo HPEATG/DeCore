@@ -1,8 +1,13 @@
 ---
-- user: name=core system=yes home=/home/core comment="CoreOS Admin"
+- user: name=core system=yes home=/home/core shell=/bin/bash comment="CoreOS Admin"
 
 - name: enable sudo for core user
   copy: src=coresudo dest=/etc/sudoers.d/coresudo mode=0440 owner=root group=root 
+
+- name: copy over your .ssh/authorized_keys
+  authorized_key: user=core
+    key="{{ lookup('file', '~/.ssh/id_core_rsa.pub') }}"
+    manage_dir=no
 
 - name: check if fleet {{ fleet.version }} is already at {{ fleet.clone }}/bin/fleet
   stat: path={{ fleet.clone }}/bin/fleetd
