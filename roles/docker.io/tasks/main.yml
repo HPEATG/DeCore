@@ -44,4 +44,4 @@
 
 - command: docker pull capttofu/sinatra-with-logstash
 
-- command: docker pull capttofu/nginx`
+- command: docker pull capttofu/nginx
