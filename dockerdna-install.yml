@@ -3,7 +3,7 @@
   sudo: true
   tasks:
     - name: Need to update package information
-    - command: apt-get update
+      command: apt-get update
 
 - hosts: "{{ hosts | default('servers') }}"
   sudo: true
