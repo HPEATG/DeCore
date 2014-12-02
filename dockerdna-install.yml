@@ -6,7 +6,7 @@
     # problems.
     - name: Need to update package information
       command: apt-get update
-    - name:Fix UUID if missing after build
+    - name: Fix UUID if missing after build
       command: systemctl reload-or-restart reuuid.service
     - name: Restart the journal for systemd
       command: systemctl reload-or-restart systemd-journald.service
