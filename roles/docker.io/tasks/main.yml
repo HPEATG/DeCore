@@ -5,21 +5,19 @@
     - btrfs-tools
     - aufs-tools
 
-#- name: unmount /mnt
-#  mount: name=/mnt src="{{ docker.mnt_dev |  default('/dev/vdb') }}" fstype="{{ docker.mnt_fstype | default('ext3') }}" state=absent
+- name: unmount "{{ docker_mount | default('/dev/vdb') }}" from /mnt
+  mount:
+    name: /mnt
+    src: "{{ docker_mount | default('/dev/vdb') }}"
+    fstype: ext3
+    state: absent
 
-#- name: format "{{ docker.mnt_dev |  default('/dev/vdb') }}" 
-#  command: mkfs."{{ docker.mnt_fstype | default('ext3') }}" -f "{{ docker.mnt_dev |  default('/dev/vdb') }}" 
-
-#- name: mount "{{ docker.mnt_dev |  default('/dev/vdb') }}" /var/lib/docker
-#  mount: name=/var/lib/docker src="{{ docker.mnt_dev |  default('/dev/vdb') }}" fstype="{{ docker.mnt_fstype | default('ext3') }}"  state=mounted
-
-- name: unmount /mnt
-  mount: name=/mnt src=/dev/vdb fstype=ext3 state=absent
-
-- name: mount /dev/vdb  /var/lib/docker
-  mount: name=/var/lib/docker src=/dev/vdb fstype=ext3  state=mounted
-
+- name: mount "{{ docker_mount | default('/dev/vdb') }}" to /var/lib/docker
+  mount: 
+    name: /var/lib/docker 
+    src: "{{ docker_mount | default('/dev/vdb') }}" 
+    fstype: "{{ docker_fstype | default('auto') }}"
+    state: mounted
 
 - name: ensure docker.io is the latest version
   apt: pkg={{ item }} state=latest
@@ -40,3 +38,10 @@
 - name: start the docker.service
   service: name=docker.service enabled=yes state=started
 
+- name: docker pull items
+  command: docker pull {{ item }}
+  with_items:
+    - capttofu/elasticsearch
+    - capttofu/logstash
+    - capttofu/sinatra-with-logstash
+    - capttofu/nginx

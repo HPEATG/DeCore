@@ -68,10 +68,16 @@
 - name: link etcd to /usr/local/sbin/etcd
   file: src=/srv/etcd-src/bin/etcd dest=/usr/local/sbin/etcd state=link
 
+- name: link etcdctl to /bin/etcdctl
+  file: src=/srv/etcdctl-src/bin/etcdctl  dest=/bin/etcdctl state=link
+
+- name: link etcdctl to /usr/bin/etcdctl
+  file: src=/srv/etcdctl-src/bin/etcdctl  dest=/usr/bin/etcdctl state=link
+
 - name: link etcdctl to /usr/local/bin/etcdctl
   file: src=/srv/etcdctl-src/bin/etcdctl  dest=/usr/local/bin/etcdctl state=link
 
-- user: name=etcd state=absent
+#- user: name=etcd state=absent
 
 - user: name=etcd system=yes home=/var/lib/etcd comment="etcd user"
 
