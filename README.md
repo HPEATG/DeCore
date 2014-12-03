@@ -52,8 +52,14 @@ Add the VM hosts ip's to your ~/.ssh/config. Modify this to the IP's you want to
 	Host az1-atg-dcore-03
 	Hostname x.x.x.x
     	User debian
-    	IdentityFile ~/.ssh/id_rsa-hp
+    	IdentityFile ~/.ssh/id_rsa
     	IdentitiesOnly yes
+
+To make fleetctl work later please copy the ssh public key to 
+
+    ~/.ssh/id_core_rsa.pub
+
+This will then be copied over to the 'core' user later.
 
 Next use the `dockerdna-install.yml` playbook to install the Docker
 DNA components onto the running, bare cluster of Debian hosts:
