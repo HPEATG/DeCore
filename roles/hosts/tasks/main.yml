@@ -3,7 +3,7 @@
   template: src=hosts.j2 dest=/etc/hosts
 
 - name: change /etc/hostname
-  template: src= hostname.j2 dest=/etc/hostname 
+  template: src=hostname.j2 dest=/etc/hostname 
 
 - name: set hostname
   command: hostname "{{ inventory_hostname }}"
