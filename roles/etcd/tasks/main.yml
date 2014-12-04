@@ -2,7 +2,7 @@
 # etcd server
 #  Taken from https://github.com/BrianAker/store_diff_url
 - name: url diff
-  stat: path=files/discovery
+  stat: path="{{ discovery_file | default('files/discovery') }}"
   register: discovery_stat
   connection: local
 
