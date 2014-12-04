@@ -24,6 +24,12 @@
   command: chdir={{ fleet.clone }} ./build
   when: fleet_result.stat.exists == false and fleet_cloned_done|success
 
+- name: Creates directory /etc/fleet
+  file: path=/etc/fleet state=directory
+
+- name: place fleet.conf.j2 into /etc/fleet/fleet.conf
+  template: src=fleet.conf.j2 dest=/etc/fleet/fleet.conf mode=0644
+
 - name: upload systemd fleet.*
   copy: src={{ item }} dest=/etc/systemd/system/{{ item }} mode=0644 owner=root group=root 
   with_items:
