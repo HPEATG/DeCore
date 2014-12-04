@@ -77,13 +77,7 @@
 - name: link etcdctl to /usr/local/bin/etcdctl
   file: src=/srv/etcdctl-src/bin/etcdctl  dest=/usr/local/bin/etcdctl state=link
 
-#- user: name=etcd state=absent
-
 - user: name=etcd system=yes home=/var/lib/etcd comment="etcd user"
-
-# Add some logic to start etcd..
-- name: upload ectd test script
-  template: src=etcd.j2 dest=/tmp/etcd.sh mode=0755
 
 - name: upload systemd etcd.service
   template: src=etcd.service.j2 dest=/etc/systemd/system/etcd.service mode=0644
