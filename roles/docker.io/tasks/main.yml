@@ -39,9 +39,13 @@
   service: name=docker.service enabled=yes state=started
 
 - name: docker pull items
-  command: docker pull {{ item }}
+  docker_pull:
+    repo: "{{ item }}"
+    tag: latest
   with_items:
     - capttofu/elasticsearch
     - capttofu/logstash
     - capttofu/sinatra-with-logstash
     - capttofu/nginx
+  register: command_result
+  ignore_errors: yes
