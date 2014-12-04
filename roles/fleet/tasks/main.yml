@@ -30,11 +30,23 @@
 - name: place fleet.conf.j2 into /etc/fleet/fleet.conf
   template: src=fleet.conf.j2 dest=/etc/fleet/fleet.conf mode=0644
 
+- name: render /etc/environment
+  template: src=environment.j2 dest=/etc/environment mode=0644
+
 - name: upload systemd fleet.*
   copy: src={{ item }} dest=/etc/systemd/system/{{ item }} mode=0644 owner=root group=root 
   with_items:
     - fleet.socket
     - fleet.service
+
+- name: reload systemd 
+  command: systemctl daemon-reload
+
+- name: stop the fleetd.service
+  service: name=fleet enabled=yes state=stopped
+
+- name: setuid to fleetctl
+  file: path=/srv/fleet-src/bin/fleetctl  mode=4755
 
 - name: link fleetctl to /usr/local/bin/fleetctl
   file: src=/srv/fleet-src/bin/fleetctl  dest=/usr/local/bin/fleetctl state=link
@@ -45,5 +57,3 @@
 - name: start the fleetd.service
   service: name=fleet enabled=yes state=started
 
-- name: render /etc/environment
-  template: src=environment.j2 dest=/etc/environment mode=0644
