@@ -42,9 +42,6 @@
 - name: reload systemd 
   command: systemctl daemon-reload
 
-- name: stop the fleetd.service
-  service: name=fleet enabled=yes state=stopped
-
 - name: setuid to fleetctl
   file: path=/srv/fleet-src/bin/fleetctl  mode=4755
 
