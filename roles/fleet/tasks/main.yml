@@ -1,4 +1,38 @@
 ---
+- name: Create the core user
+  user: name=core 
+    system=yes 
+    home=/home/core 
+    groups=docker,systemd-journal 
+    shell=/bin/bash 
+    comment="CoreOS Admin"
+
+- name: enable sudo for core user
+  copy: src=coresudo 
+    dest=/etc/sudoers.d/coresudo 
+    mode=0440 owner=root 
+    group=root 
+
+- name: Upload update-ssh-keys script
+  copy: src=update-ssh-keys
+    dest=/usr/local/bin/update-ssh-keys 
+    owner=root 
+    group=root 
+    mode=0755 
+
+- name: Creates directory /home/core/.ssh/authorized_keys.d 
+  file:  path=/home/core/.ssh/authorized_keys.d 
+   state=directory 
+   owner=core 
+   group=core 
+   mode=0755
+
+- name: copy over your .ssh/authorized_keys
+  authorized_key: 
+    user: core
+    key: "{{ lookup('file', '~/.ssh/id_core_rsa.pub') }}"
+    manage_dir: yes
+
 - name: check if fleet {{ fleet.version }} is already at {{ fleet.clone }}/bin/fleet
   stat: path={{ fleet.clone }}/bin/fleetd
   register: fleet_result
@@ -14,17 +48,41 @@
   command: chdir={{ fleet.clone }} ./build
   when: fleet_result.stat.exists == false and fleet_cloned_done|success
 
+- name: Creates directory /etc/fleet
+  file: path=/etc/fleet state=directory
+
+- name: place fleet.conf.j2 into /etc/fleet/fleet.conf
+  template: src=fleet.conf.j2 dest=/etc/fleet/fleet.conf mode=0644
+
+- name: render /etc/environment
+  template: src=environment.j2 dest=/etc/environment mode=0644
+
 - name: upload systemd fleet.*
   copy: src={{ item }} dest=/etc/systemd/system/{{ item }} mode=0644 owner=root group=root 
   with_items:
     - fleet.socket
     - fleet.service
 
+- name: setuid to fleetctl
+  file: path=/srv/fleet-src/bin/fleetctl  mode=4755
+
 - name: link fleetctl to /usr/local/bin/fleetctl
-  file: src=/srv/fleet-src/bin/fleetctl  dest=/usr/local/bin/fleetctl state=link
+  file: src=/srv/fleet-src/bin/fleetctl
+    dest=/usr/local/bin/fleetctl
+    state=link
 
 - name: link fleetd to /usr/local/sbin/fleetd
-  file: src=/srv/fleet-src/bin/fleetd  dest=/usr/local/bin/fleetd state=link
+  file: src=/srv/fleet-src/bin/fleetd
+    dest=/usr/local/bin/fleetd
+    state=link
 
-- name: start the fleetd.service
-  service: name=fleet enabled=yes state=started
+# There is some issues with systemd and the ansible service module
+- name: reload systemd 
+  command: systemctl daemon-reload
+
+- command: systemctl enable fleet.service
+
+- name: start the fleet.service
+  service: name=fleet
+    state=restarted
+

@@ -1,0 +1,28 @@
+---
+- hosts: "{{ hosts | default('servers') }}"
+  sudo: true
+  tasks:
+    # These are some hacks for the demo because of bootable image 
+    # problems.
+    - name: Need to update package information
+      command: apt-get update
+    - name: Fix UUID if missing after build
+      command: systemctl reload-or-restart reuuid.service
+    - name: Restart the journal for systemd
+      command: systemctl reload-or-restart systemd-journald.service
+    # Easier to have the sample_app waiting to be launched
+    - name: copy over sample_app
+      copy: dest=/root src=sample_app owner=root group=root mode=644
+
+- hosts: "{{ hosts | default('servers') }}"
+  sudo: true
+  roles:
+    - installer-snapshot
+    - hosts
+    - git
+    - golang-go
+    - docker.io
+    - etcd
+    - fleet
+    - installer-snapshot
+

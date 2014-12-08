@@ -91,6 +91,7 @@ EXAMPLES = '''
       with_dict: nova_images
 
 '''
+
 from types import NoneType
 
 HAS_NOVA_CLIENT = True
@@ -136,7 +137,7 @@ class NovaFacts:
         return 'nova_%s' % (re.sub('[^\w-]', '_', value).lower().lstrip('_'))
 
     def get_priv_pub(self, obj):
-	priv_pub = {}
+        priv_pub = {'ipv4_public' : None}
         private = [net['addr']
                    for net in
                    getattr(obj, 'addresses').itervalues().next()
@@ -148,9 +149,10 @@ class NovaFacts:
                   getattr(obj, 'addresses').itervalues().next()
                   if 'OS-EXT-IPS:type'
                   in net and net['OS-EXT-IPS:type'] == 'floating']
-        priv_pub['ipv4_public'] = public[0]
+        if public is not None and len(public) > 0:
+            priv_pub['ipv4_public'] = public[0]
 
-	return priv_pub 
+        return priv_pub 
 
     def object_to_dict(self, obj):
         instance = {}
@@ -161,7 +163,7 @@ class NovaFacts:
             if (isinstance(value, NON_CALLABLES) and not key.startswith('_')):
                 key = self.key_cleanup(key)
                 instance[key] = value
-	instance.update(self.get_priv_pub(obj))
+        instance.update(self.get_priv_pub(obj))
         return instance
 
     def object_list_to_dict(self, object_list, name):

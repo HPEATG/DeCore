@@ -1,0 +1,4 @@
+[submodule "sample_app"]
+	path = sample_app
+	url = git@github.com:HPATG/sample_app.git
+	branch = dna_docker

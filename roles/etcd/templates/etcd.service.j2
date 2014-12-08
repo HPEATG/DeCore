@@ -1,19 +1,21 @@
 [Unit]
 Description=etcd
+Wants=network.target
+After=network.target
 
 [Service]
 User=root
 PermissionsStartOnly=true
-
-#Environment=ETCD_DATA_DIR=machines/%m
-#Environment=ETCD_PEER_ADDR="{{ ansible_eth0.ipv4.address }}:7001"
-#Environment=ETCD_BIND_ADDR="0.0.0.0"
-#Environment=ETCD_PEER_BIND_ADDR="0.0.0.0"
-#Environment=ETCD_DISCOVERY="{{ etcd_discovery_contents }} "
-#Environment=ETCD_ADDR="127.0.0.1:4001"
-#Environment=ETCD_NAME=%m
-#ExecStart=/srv/etcd-src/bin/etcd 
-
-ExecStart=/srv/etcd-src/bin/etcd -peer-addr {{ ansible_eth0.ipv4.address }}:7001 -addr {{ ansible_eth0.ipv4.address }}:4001 -bind-addr 0.0.0.0 -discovery {{ etcd_discovery_contents }}  -peer-bind-addr 0.0.0.0 -data-dir machines/%m -name %m
+ExecStart=/srv/etcd-src/bin/etcd \
+          -peer-addr {{ ansible_eth0.ipv4.address }}:7001 \
+          -addr {{ ansible_eth0.ipv4.address }}:4001 \
+          -bind-addr 0.0.0.0 \
+          -discovery {{ etcd_discovery_contents }} \
+          -peer-bind-addr 0.0.0.0 \
+          -data-dir machines/%m \
+          -name %H
 Restart=always
 RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

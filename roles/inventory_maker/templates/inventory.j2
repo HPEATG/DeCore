@@ -1,8 +1,8 @@
 [localhost]
-localhost
+localhost ansible_connection=local
 
 {% if nova_key_file is defined %}
-{% set ssh_key='ansible_ssh_key=' + nova_key_file %}
+{% set ssh_key='ansible_ssh_private_key_file=' + nova_key_file %}
 {% else %}
 {% set ssh_key ='' %}
 {% endif %}
@@ -13,5 +13,7 @@ localhost
 {% endif %}
 [servers]
 {% for instance in nova_instances | sort %}
-{{ instance }} {{ ssh_key }} ansible_ssh_host={{ nova_instances[instance]['ipv4_public'] }} {{ ans_ssh_user }} 
+{% if not instance.find(nova_name) %}
+{{ instance }} {{ ssh_key }} ansible_ssh_host={{ nova_instances[instance]['ipv4_public'] }} ipv4_public={{ nova_instances[instance]['ipv4_public'] }} ipv4_private={{ nova_instances[instance]['ipv4_private'] }} {{ ans_ssh_user }}
+{% endif %}
 {% endfor %}

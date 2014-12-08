@@ -1,17 +1,27 @@
 ---
 # etcd server
 #  Taken from https://github.com/BrianAker/store_diff_url
+- name: set fact for discovery file
+  set_fact:
+   discovery_file: "{{ etcd_discovery_file | default('files/discovery') }}"
+  connection: local
+  sudo: false
+  run_once: true
+
 - name: url diff
-  stat: path=files/discovery
+  stat: path="{{ discovery_file }}"
   register: discovery_stat
   connection: local
+  run_once: true
 
 - name: grab url 
   get_url:
     url: "{{ etcd.discovery }}"
-    dest: files/discovery
+    dest: "{{ discovery_file }}"
     mode: 0440
   connection: local
+  sudo: false
+  run_once: true
   register: result
   when: discovery_stat.stat.exists == False
 
@@ -19,19 +29,24 @@
   debug:
     msg: "Change occured"
   when: result.changed
+  run_once: true
 
-- name: Read into variable
-  command: cat files/discovery
-  connection: local
-  register: file_echo_contents
+
+#- name: Read into variable
+#  command: cat files/discovery
+#  connection: local
+#  register: file_echo_contents
 
 - name: set fact
   set_fact:
-    etcd_discovery_contents: "{{ file_echo_contents.stdout }}"
+    etcd_discovery_contents: "{{ lookup('file', discovery_file ) }}"
+  connection: local
+  run_once: true
 
 - name: Test for change
   debug:
     msg: "{{ etcd_discovery_contents }}"
+  run_once: true
 
 ####
 - name: check if etcd {{ etcd.version }} is already at {{ etcd.clone }}/bin/etcd
@@ -68,25 +83,25 @@
 - name: link etcd to /usr/local/sbin/etcd
   file: src=/srv/etcd-src/bin/etcd dest=/usr/local/sbin/etcd state=link
 
+- name: link etcdctl to /bin/etcdctl
+  file: src=/srv/etcdctl-src/bin/etcdctl  dest=/bin/etcdctl state=link
+
+- name: link etcdctl to /usr/bin/etcdctl
+  file: src=/srv/etcdctl-src/bin/etcdctl  dest=/usr/bin/etcdctl state=link
+
 - name: link etcdctl to /usr/local/bin/etcdctl
   file: src=/srv/etcdctl-src/bin/etcdctl  dest=/usr/local/bin/etcdctl state=link
 
-- user: name=etcd state=absent
-
 - user: name=etcd system=yes home=/var/lib/etcd comment="etcd user"
-
-# Add some logic to start etcd..
-- name: upload ectd test script
-  template: src=etcd.j2 dest=/tmp/etcd.sh mode=0755
 
 - name: upload systemd etcd.service
   template: src=etcd.service.j2 dest=/etc/systemd/system/etcd.service mode=0644
 
+# There is some issues with systemd and the ansible service module
 - name: systemctl daemon-reload
   command: systemctl daemon-reload
 
-- name: stop the etcd.service
-  service: name=etcd enabled=yes state=stopped
-
+- command: systemctl enable etcd.service
+ 
 - name: start the etcd.service
-  service: name=etcd enabled=yes state=started
+  service: name=etcd state=started

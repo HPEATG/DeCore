@@ -1,18 +1,18 @@
 [Unit]
 Description=fleet daemon
 
-Wants=etcd.service
-After=etcd.service
+Wants=etcd.service network.target 
+After=etcd.service network.target 
 
 Wants=fleet.socket
 After=fleet.socket
 
 [Service]
+User=root
 ExecStart=/srv/fleet-src/bin/fleetd
 Restart=always
 RestartSec=10s
 
-
-[Unit]
-Description=fleet
-
+[Install]
+WantedBy=multi-user.target
+Alias=fleetd.service

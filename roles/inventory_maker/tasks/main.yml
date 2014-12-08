@@ -9,8 +9,11 @@
     wait_for: 200
     security_groups: default
 
-- name: nova inventory template
+- name: make sure inventory directory exists 
+  file: path="{{ nova_inventory_dir }}" state=directory 
+
+- name: nova inventory template (make sure to set inventory dir)
   local_action: template src=inventory.j2 dest="{{ nova_inventory_dir | default('~/inventory') }}/inventory_{{ nova_username }}"
 
 - name: ssh_config file for dynamic hosts
-  local_action: template src=ssh_config_dynamic.j2 dest="~/ssh_config_dynamic_{{ nova_username }}"
+  local_action: template src=ssh_config_dynamic.j2 dest="{{ ssh_config | default('~/ssh_config_dynamic') }}"
