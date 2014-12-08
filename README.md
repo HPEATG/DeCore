@@ -20,22 +20,29 @@ Some local variable in the .ansible.cfg
 	library_path   = /usr/share/ansible/atg_modules
 	remote_tmp     = $HOME/.ansible/tmp
 
-Source source_me file
+You can overide the location of the hostfile inventory using: 
 
-	source source_me
+	ansible-playbook -i <path to inventory directory>  <playbook>
 
-Create a minimum of three virtual machines named
+Create a minimum of three virtual machines however five works much better
 
 	az1-atg-dcore-01
 	az1-atg-dcore-02
 	az1-atg-dcore-03
+	az1-atg-dcore-04
+	az1-atg-dcore-05
 
 The virtual machines *must* be running the latest Debian "jessie"
 release (aka "testing").  For instructions on how to upgrade HP Cloud
 "wheezy" images to "jessie", see
 [HOWTO-build-testing-image](blob/devel/HOWTO-build-testing-image.md). 
 
-Add the VM hosts ip's to your ~/.ssh/config. Modify this to the IP's you want to connect to.
+Add the VM hosts ip's to your ~/.ssh/config. 
+   
+	ansible-playbook inventory.yml
+
+This will output a ssh_config file that you can then append to your current
+~/.ssh/config
 
 	Host az1-atg-dcore-01
 	Hostname x.x.x.x
@@ -55,7 +62,9 @@ Add the VM hosts ip's to your ~/.ssh/config. Modify this to the IP's you want to
     	IdentityFile ~/.ssh/id_rsa
     	IdentitiesOnly yes
 
-To make fleetctl work later please copy the ssh public key to 
+To make fleetctl work later please copy the ssh public key you want for 
+the core user. Fleetctl connects over ssh and expects the private key to be 
+loaded into an ssh-agent.
 
     ~/.ssh/id_core_rsa.pub
 
@@ -66,10 +75,6 @@ DNA components onto the running, bare cluster of Debian hosts:
 
     ansible-playbook dockerdna-install.yml
     
-_Note_:  The `dockerdna-install.yml` playbook was formerly named
-`demo-installer.yml` and may not have migrated in the GitHub
-repository yet.  
-
 ## Ansible automation
 
 The previous steps of launching nova instances, upgrading them, and installing the software can be accomplished using Ansible. 
@@ -88,27 +93,34 @@ Create an inventory file with your nova credentials. This file will only need lo
 
 Note: the text ```$inventory_dir``` is used in these steps. This is where you chose to keep your inventory files.
 
-    [nova]
-    localhost
-    
-    [nova:vars]
-    nova_username="username"
-    nova_password='redacted password'
-    nova_tenant_name="username-tenant1"
-    nova_region_name="region-b.geo-1"
-    nova_auth_url="https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/"
-    # Verify the image ID corresponding to "Debian Wheezy 7.6+shellshock 64-bit 20141002 - Partner Image" 
-    #nova_image_id=af3507af-bf70-4706-aec4-23936b8db399
-    nova_image_id=e2e78258-0ac3-40fc-951b-5cb35f996726
-    # you will have to pre-create this
-    nova_key=atg
-    # this is the private key file on the host you are running ansible from
-    nova_key_file=~/.ssh/id_dsa
-    # where you want inventory to be
-    nova_inventory_dir=~/inventory
-    # the ssh_user to use on the host- written to your inventory file 
-    # as ansible_ssh_user as well as your ssh config file
-    ssh_user=debian
+
+	[servers:vars]
+	etcd_discovery_file="~/DeCore/discovery-west"
+	
+	[nova]
+	localhost ansible_connection=local
+	
+	[nova:vars]
+	nova_username="your-username"
+	nova_password='your-password'
+	nova_tenant_name="your-tenant-name"
+	nova_region_name="region-a.geo-1"
+	nova_auth_url="https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/"
+	nova_image_id=name-of-an-image-to-boot
+	nova_key=ssh-key-for-login
+	nova_name=name-of-server
+	nova_flavor_id=101
+	num_instances=5
+	ssh_user=root
+
+	# where to write out your ssh config
+	ssh_config="~/.ssh/config.d/01_ssh_config-west"
+	
+	# where to write out your inventory file. This is should 
+	# be the same directory as where this file should 
+	# live also
+	nova_inventory_dir="~/inventory-west"
+	
 
 Once this inventory file is created, it should be placed in $inventory_dir/inventory_nova for ease-of-use.
 
