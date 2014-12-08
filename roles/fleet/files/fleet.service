@@ -8,10 +8,11 @@ Wants=fleet.socket
 After=fleet.socket
 
 [Service]
+User=root
 ExecStart=/srv/fleet-src/bin/fleetd
 Restart=always
 RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
-Alias=fleet.service
+Alias=fleetd.service

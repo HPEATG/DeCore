@@ -6,11 +6,16 @@ After=network.target
 [Service]
 User=root
 PermissionsStartOnly=true
-
-ExecStart=/srv/etcd-src/bin/etcd -peer-addr {{ ansible_eth0.ipv4.address }}:7001 -addr {{ ansible_eth0.ipv4.address }}:4001 -bind-addr 0.0.0.0 -discovery {{ etcd_discovery_contents }} -peer-bind-addr 0.0.0.0 -data-dir machines/%m -name %H
+ExecStart=/srv/etcd-src/bin/etcd \
+          -peer-addr {{ ansible_eth0.ipv4.address }}:7001 \
+          -addr {{ ansible_eth0.ipv4.address }}:4001 \
+          -bind-addr 0.0.0.0 \
+          -discovery {{ etcd_discovery_contents }} \
+          -peer-bind-addr 0.0.0.0 \
+          -data-dir machines/%m \
+          -name %H
 Restart=always
 RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
-Alias=etcd.service
