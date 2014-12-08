@@ -3,7 +3,7 @@
   user: name=core 
     system=yes 
     home=/home/core 
-    groups=docker,systemd-journal,core 
+    groups=docker,systemd-journal 
     shell=/bin/bash 
     comment="CoreOS Admin"
 
@@ -63,9 +63,6 @@
     - fleet.socket
     - fleet.service
 
-- name: reload systemd 
-  command: systemctl daemon-reload
-
 - name: setuid to fleetctl
   file: path=/srv/fleet-src/bin/fleetctl  mode=4755
 
@@ -79,8 +76,13 @@
     dest=/usr/local/bin/fleetd
     state=link
 
+# There is some issues with systemd and the ansible service module
+- name: reload systemd 
+  command: systemctl daemon-reload
+
+- command: systemctl enable fleet.service
+
 - name: start the fleet.service
   service: name=fleet
-    enabled=yes
     state=restarted
 
