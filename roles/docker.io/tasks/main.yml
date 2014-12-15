@@ -12,6 +12,12 @@
     fstype: ext3
     state: absent
 
+- name: Format "{{ docker_mount | default('/dev/vdb') }}" btrfs
+  filesystem: 
+    fstype: btrfs 
+    force: yes 
+    dev: "{{ docker_mount | default('/dev/vdb') }}" 
+
 - name: mount "{{ docker_mount | default('/dev/vdb') }}" to /var/lib/docker
   mount: 
     name: /var/lib/docker 
