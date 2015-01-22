@@ -47,5 +47,6 @@
     - capttofu/logstash
     - capttofu/sinatra-with-logstash
     - capttofu/nginx
+    - capttofu/benchmarkrb
   register: command_result
   ignore_errors: yes

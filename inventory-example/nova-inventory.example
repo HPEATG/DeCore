@@ -1,0 +1,26 @@
+[servers:vars]
+etcd_discovery_file="~/DeCore/discovery-west"
+
+[nova]
+localhost ansible_connection=local
+
+[nova:vars]
+nova_username="your-username"
+nova_password='your-password'
+nova_tenant_name="your-tenant-name"
+nova_region_name="region-a.geo-1"
+nova_auth_url="https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/"
+nova_image_id=name-of-an-image-to-boot
+nova_key=ssh-key-for-login
+nova_name=name-of-server
+nova_flavor_id=101
+num_instances=5
+ssh_user=root
+
+# where to write out your ssh config
+ssh_config="~/.ssh/config.d/01_ssh_config-west"
+
+# where to write out your inventory file. This is should 
+# be the same directory as where this file should 
+# live also
+nova_inventory_dir="~/inventory-west"
