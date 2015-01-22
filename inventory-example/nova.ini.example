@@ -1,0 +1,28 @@
+# Ansible OpenStack external inventory script
+
+[openstack]
+# API version
+version = 2
+
+# OpenStack nova username
+username = your-username
+
+# OpenStack password
+password = your-password
+
+# OpenStack nova auth_url
+auth_url  = https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+
+# OpenStack nova project_id (also known as tenant_name)
+project_id = your-project-id
+
+# Authentication system
+auth_system = keystone
+
+# Server region name to use
+region_name = region-a.geo-1
+
+# Service type
+service_type = compute
+
+insecure = 0
