@@ -1,4 +1,7 @@
 ---
+- name: render gitconfig 
+  template: src=gitconfig.j2 dest="{{ install_snapshot.home }}/.gitconfig" mode=0755  
+
 - name: "checking for {{ install_snapshot.home }}"
   stat: path={{ install_snapshot.home }}
   register: install_snapshot_home

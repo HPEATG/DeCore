@@ -9,12 +9,12 @@
   mount:
     name: /mnt
     src: "{{ docker_mount | default('/dev/vdb') }}"
-    fstype: ext3
+    fstype: ext4
     state: absent
 
 - name: Format "{{ docker_mount | default('/dev/vdb') }}" btrfs
   filesystem: 
-    fstype: btrfs 
+    fstype: "{{ docker_fstype | default('ext4') }}"
     force: yes 
     dev: "{{ docker_mount | default('/dev/vdb') }}" 
 
@@ -33,16 +33,21 @@
 - name: Add docker user for socket
   user: name=docker shell=/bin/nologin system=yes
 
-- name: Copy docker required systemd units
-  copy: src={{ item }}  dest=/etc/systemd/system/{{ item }}  owner=root group=root mode=0644
-  with_items:
-    - 50-docker-veth.network
-    - 50-docker.network
-    - docker.service
-    - docker.socket
+- name: Add login user to docker group 
+  user: name="{{ remote_user }}" groups=docker 
 
-- name: start the docker.service
-  service: name=docker.service enabled=yes state=started
+# Docker install takes care of these ugly details
+# If this is run now, docker is broken
+#- name: Copy docker required systemd units
+#  copy: src={{ item }}  dest=/etc/systemd/system/{{ item }}  owner=root group=root mode=0644
+#  with_items:
+#    - 50-docker-veth.network
+#    - 50-docker.network
+#    - docker.service
+#    - docker.socket
+
+#- name: start the docker.service
+#  service: name=docker.service enabled=yes state=started
 
 - name: docker pull items
   docker_pull:

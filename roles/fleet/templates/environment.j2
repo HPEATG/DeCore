@@ -1,3 +1,3 @@
 # This file was added by ansible for fleet
 COREOS_PUBLIC_IPV4="{{ ipv4_public }}"
-COREOS_PRIVATE_IPV4="{{ ipv4_private }}"
+COREOS_PRIVATE_IPV4="{{ ansible_eth0.ipv4.address }}"

@@ -30,7 +30,7 @@
 - name: copy over your .ssh/authorized_keys
   authorized_key: 
     user: core
-    key: "{{ lookup('file', '~/.ssh/id_core_rsa.pub') }}"
+    key: "{{ lookup('file', core_pub_key) }}"
     manage_dir: yes
 
 - name: check if fleet {{ fleet.version }} is already at {{ fleet.clone }}/bin/fleet

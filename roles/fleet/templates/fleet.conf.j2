@@ -23,7 +23,7 @@ public_ip="{{ ipv4_public }}"
 # Comma-delimited key/value pairs that are published to the fleet registry.
 # This data can be referenced in unit files to affect scheduling descisions.
 # An example could look like: metadata="region=us-west,az=us-west-1"
-metadata="host={{ inventory_hostname }},ipv4_public={{ ipv4_public }},ipv4_private={{ ipv4_private }}"
+metadata="host={{ inventory_hostname }},ipv4_public={{ ipv4_public }},ipv4_private={{ ansible_eth0.ipv4.address }}"
 
 # An Agent will be considered dead if it exceeds this amount of time to
 # communicate with the Registry. The agent will attempt a heartbeat at half

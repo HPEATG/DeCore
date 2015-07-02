@@ -3,15 +3,16 @@
 #  Taken from https://github.com/BrianAker/store_diff_url
 - name: set fact for discovery file
   set_fact:
-   discovery_file: "{{ etcd_discovery_file | default('files/discovery') }}"
+   discovery_file: "{{ etcd_discovery_file | default('/tmp/files/discovery') }}"
   connection: local
-  sudo: false
+  become: no 
   run_once: true
 
 - name: url diff
   stat: path="{{ discovery_file }}"
   register: discovery_stat
   connection: local
+  become: no 
   run_once: true
 
 - name: grab url 
@@ -20,7 +21,7 @@
     dest: "{{ discovery_file }}"
     mode: 0440
   connection: local
-  sudo: false
+  become: no 
   run_once: true
   register: result
   when: discovery_stat.stat.exists == False
