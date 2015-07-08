@@ -1,17 +1,17 @@
 ---
 - name: render gitconfig 
-  template: src=gitconfig.j2 dest="{{ install_snapshot.home }}/.gitconfig" mode=0755  
+  template: src=gitconfig.j2 dest="{{ home }}/.gitconfig" mode=0755  
 
 - name: "checking for {{ install_snapshot.home }}"
-  stat: path={{ install_snapshot.home }}
+  stat: path="{{ install_snapshot.home }}"
   register: install_snapshot_home
 
 - name: "make {{ install_snapshot.home }}"
-  file: path={{ install_snapshot.home }} state=directory owner=root group=root mode=0755
+  file: path="{{ install_snapshot.home }}" state=directory owner=root group=root mode=0755
   when: install_snapshot_home.stat.exists == false
 
 - name: upload snapshot script
-  template: src=snapshot.j2 dest="{{ install_snapshot.home }}/snapshot.sh" mode=0755  
+  template: src=snapshot.j2 dest="{{ install_snapshot.home }}/snapshot.sh" owner="{{ remote_user }}" mode=0755  
 
 - name: create snaphost history of currently installed packages
   shell: "{{ install_snapshot.home }}/snapshot.sh"

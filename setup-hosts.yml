@@ -1,5 +1,5 @@
 ---
-- hosts: nova 
-  sudo: true
+- hosts: "{{ target | default('nova') }}"
+  sudo: false 
   roles:
     - instance_launcher

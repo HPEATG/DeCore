@@ -9,6 +9,16 @@
     wait_for: 200
     security_groups: default
 
+- name: Make sure the old entry for the host is removed from /etc/hosts
+  sudo: true
+  lineinfile: dest=/etc/hosts regexp="^[\d\.]+ {{ item.key }}" state=absent
+  with_dict: nova_instances
+
+- name: Make sure there is a new host entry in /etc/hosts 
+  sudo: true
+  lineinfile: dest=/etc/hosts line="{{ item.value.ipv4_public }} {{ item.key }}" state=present
+  with_dict: nova_instances
+
 - name: make sure inventory directory exists 
   file: path="{{ nova_inventory_dir }}" state=directory 
 

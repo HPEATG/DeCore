@@ -12,7 +12,7 @@
     fstype: ext4
     state: absent
 
-- name: Format "{{ docker_mount | default('/dev/vdb') }}" btrfs
+- name: Format "{{ docker_mount | default('/dev/vdb') }}" "{{ docker_fstype | default('ext4') }}"
   filesystem: 
     fstype: "{{ docker_fstype | default('ext4') }}"
     force: yes 
@@ -25,16 +25,19 @@
     fstype: "{{ docker_fstype | default('auto') }}"
     state: mounted
 
+- name: Add docker group
+  group: name=docker state=present system=yes
+
+- name: Add docker user for socket
+  user: name=docker groups=docker shell=/bin/nologin system=yes
+
+- name: Add login user to docker group 
+  user: name="{{ remote_user }}" groups=docker 
+
 - name: ensure docker.io is the latest version
   apt: pkg={{ item }} state=latest
   with_items:
     - docker.io
-
-- name: Add docker user for socket
-  user: name=docker shell=/bin/nologin system=yes
-
-- name: Add login user to docker group 
-  user: name="{{ remote_user }}" groups=docker 
 
 # Docker install takes care of these ugly details
 # If this is run now, docker is broken
@@ -48,6 +51,9 @@
 
 #- name: start the docker.service
 #  service: name=docker.service enabled=yes state=started
+
+- name: restart the docker.service
+  service: name=docker.service enabled=yes state=restarted
 
 - name: docker pull items
   docker_pull:

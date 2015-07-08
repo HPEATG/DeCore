@@ -1,4 +1,5 @@
 - name: launch an instance
+  sudo: false
   nova_compute:
     state: "{{ nova_state | default('present') }}"
     login_username: "{{ nova_username }}"

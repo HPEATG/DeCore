@@ -17,3 +17,11 @@ localhost ansible_connection=local
 {{ instance }} {{ ssh_key }} ansible_ssh_host={{ nova_instances[instance]['ipv4_public'] }} ipv4_public={{ nova_instances[instance]['ipv4_public'] }} ipv4_private={{ nova_instances[instance]['ipv4_private'] }} {{ ans_ssh_user }}
 {% endif %}
 {% endfor %}
+[servers:vars]
+git_name={{ git_name }}
+git_email={{ git_email}}
+home={{ remote_home }} 
+etcd_discovery_file={{ etcd_discovery_file }}
+core_pub_key={{ core_pub_key }}
+remote_user={{ remote_user }}
+ansible_sudo_user={{ ansible_sudo_user }}

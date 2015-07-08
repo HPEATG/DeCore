@@ -1,5 +1,5 @@
 ---
-- hosts: nova 
+- hosts: "{{ target | default('nova') }}"
   sudo: false
   roles:
     - inventory_maker
