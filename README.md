@@ -195,21 +195,23 @@ Default:
 
 Only 3 hosts:
 
-    you@host:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -e target=nova_east -e num_hosts=3 setup-hosts.yml
+```
+you@host:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -e target=nova_east -e num_hosts=3 setup-hosts.yml
+```
 
 It is now possible to verify using the nova client that the instances are running:
 
-    you@host:~/DeCore$ nova list
+```you@host:~/DeCore$ nova list```
 
 ### Generate an inventory file for the nova compute instances
 
 Run the playbook to generate an inventory file named ```inventory_username``` one directory up in your ```$inventory_dir```, "username" being what the nova username is:
 
-    you@host:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -vvvv inventory.yml
+```you@host:~/DeCore$ ansible-playbook -i $inventory_dir/inventory_nova -vvvv inventory.yml```
 
 Verify the inventory file is created:
 
-   you@host:~/DeCore$ ls -l $nova_inventory_dir/inventory_username
+```you@host:~/DeCore$ ls -l $nova_inventory_dir/inventory_username```
 
 Note: this will also create an ssh config snippet for these hosts to manually
 add to your .ssh/config file. It is placed in your home directory as 
@@ -224,21 +226,28 @@ IMPORTANT: this will overwrite your existing ssh config which is why it is optio
 The previously-mentioned inventory role creates the same file but places it in your
 home directory for you to manually add it. This is a convenience role.
 
-    you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -e target=nova_east ssh_config.yml
-    you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -e target=nova_east hosts.yml
+```
+you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -e target=nova_east ssh_config.yml
+you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_nova -e target=nova_east hosts.yml
+```
 
 ### Run the dist-upgrade (if starting from Debian Wheezy) 
 
-    you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username dist-upgrade.yml
+```
+you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username dist-upgrade.yml
+```
 
 ### Run demo-installer
 
-    you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username demo-installer.yml
+```
+you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username demo-installer.yml
+```
 
 ### Install the cluster
 
-    you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username dockerdna-install.yml 
-
+```
+you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username dockerdna-install.yml 
+```
 
 ### Set fleetctl to connect to the cluster
 
@@ -262,6 +271,7 @@ you@host:~$ EXPORT FLEETCTL_ENDPOINT=http://15.132.48.123:4001
 ```
 
 List machines in the cluster:
+
 
 ```
 you@host:~$ fleetctl list-machines
@@ -343,3 +353,4 @@ To run it on all hosts:
     you@host:~/DeCore$ ansible-playbook -i ../inventory/inventory_username
 
 Expect to see output of the package installation, launching of containers, then a huge dictionary for you to verify your setup, then the containers being shut down.
+I
