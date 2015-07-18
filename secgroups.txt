@@ -1,0 +1,14 @@
+nova secgroup-add-rule coreos tcp 22   22   0.0.0.0/0
+nova secgroup-add-rule coreos tcp 8080 8080 0.0.0.0/0
+nova secgroup-add-rule coreos icmp-1   -1   0.0.0.0/0
+nova secgroup-add-rule coreos tcp 2380 2380 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 5003 5003 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 4001 4001 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 10101 10101 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 5000 5000 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 9200 9200 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 5001 5001 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 5002 5002 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 80   80   0.0.0.0/0
+nova secgroup-add-rule coreos tcp 7001 7001 0.0.0.0/0
+nova secgroup-add-rule coreos tcp 2379 2379 0.0.0.0/0

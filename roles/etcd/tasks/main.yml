@@ -1,5 +1,9 @@
 ---
 # etcd server
+
+- name: remove old discovery file
+  file: name="{{ etcd_discovery_file }}" state=absent
+
 #  Taken from https://github.com/BrianAker/store_diff_url
 - name: set fact for discovery file
   set_fact:

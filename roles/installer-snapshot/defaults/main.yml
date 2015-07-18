@@ -1,5 +1,5 @@
 ---
 install_snapshot:
-  home: "{{ home | default('/home/debian') }}/snapshot"
+  snapshot_dir: "{{ remote_home | default('/home/debian') }}/snapshot"
   dpkg_get_selections: "dpkg_get_selections"
   dpkg_query: "dpkg_query"

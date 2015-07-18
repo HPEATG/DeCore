@@ -4,8 +4,8 @@ StrictHostKeyChecking=no
 {% for instance in nova_instances | sort %}
 Host {{ instance }}
 Hostname {{ nova_instances[instance]['ipv4_public'] }}
-{% if ssh_user is defined %}
-  User {{ ssh_user }}
+{% if remote_user is defined %}
+  User {{ remote_user }}
 {% endif %}
 {% if nova_key_file is defined %}
   IdentityFile {{ nova_key_file }}

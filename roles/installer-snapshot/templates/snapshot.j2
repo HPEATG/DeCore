@@ -2,7 +2,7 @@
 # just get the info for the current installed packages
 
 DATE=$(date +%s)
-ARCHIVE="{{ install_snapshot.home }}"
+ARCHIVE="{{ install_snapshot.snapshot_dir }}"
 
 if [ -d ${ARCHIVE} ] ; then
   cd ${ARCHIVE}

@@ -5,7 +5,7 @@
     login_username: "{{ nova_username }}"
     login_password: "{{ nova_password }}"
     login_tenant_name: "{{ nova_tenant_name }}"
-    name: "{{ nova_name | default('test-dcore') }}-{{ item }}"
+    name: "{{ nova_name | default('test-dcore') }}-0{{ item }}"
     auth_url: "{{ nova_auth_url }}"
     region_name: "{{ nova_region_name }}"
     image_id: "{{ nova_image_id }}"

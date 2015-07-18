@@ -1,0 +1,18 @@
+- name: get nova facts
+  nova_facts:
+    login_username: "{{ nova_username }}"
+    login_password: "{{ nova_password }}"
+    login_tenant_name: "{{ nova_tenant_name }}"
+    auth_url: "{{ nova_auth_url | default('https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/') }}"
+    region_name: "{{ nova_region_name | default('region-b.geo-1') }}"
+    key_name: "{{ nova_key_name | default('yourkey') }}"
+    wait_for: 200
+    security_groups: default
+
+- name: Make sure the old entry for the host is removed 
+  lineinfile: dest=/etc/hosts regexp="^[\d\.]+ {{ item.key }}" state=absent
+  with_dict: nova_instances
+
+- name: Make sure there is a host entry on the local box
+  lineinfile: dest=/etc/hosts line="{{ item.value.ipv4_public }} {{ item.key }}" state=present
+  with_dict: nova_instances

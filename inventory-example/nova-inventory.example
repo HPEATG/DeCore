@@ -15,7 +15,10 @@ nova_key=ssh-key-for-login
 nova_name=name-of-server
 nova_flavor_id=101
 num_instances=5
-ssh_user=root
+nova_security_groups=coreos
+
+# pub key for ansible user
+core_pub_key="~/.ssh/hpcloud.pem.pub"
 
 # where to write out your ssh config
 ssh_config="~/.ssh/config.d/01_ssh_config-west"
@@ -24,3 +27,14 @@ ssh_config="~/.ssh/config.d/01_ssh_config-west"
 # be the same directory as where this file should 
 # live also
 nova_inventory_dir="~/inventory-west"
+
+# remote_user -- must have sudo
+# debian
+remote_user=debian
+remote_home=/home/debian
+# ubuntu
+# remote_user=ubuntu
+# remote_home=/home/ubuntu
+
+git_name="Your Name"
+git_email=your@email.address
