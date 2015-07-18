@@ -214,8 +214,7 @@ Verify the inventory file is created:
 ```you@host:~/DeCore$ ls -l $nova_inventory_dir/inventory_username```
 
 Note: this will also create an ssh config snippet for these hosts to manually
-add to your .ssh/config file. It is placed in your home directory as 
-```ssh_config_dynamic_username```
+add to your ```.ssh/config``` file. It is placed in your home directory as ```ssh_config_dynamic_username```
 
 ### OPTIONAL (!) generate ssh config file and entry in /etc/hosts for convenience 
 
